@@ -1,0 +1,14 @@
+@font-face {
+  font-family: Spartan;
+  src: url(./LeagueSpartan-Regular.ttf);
+}
+
+body {
+  margin: 0;
+  font-family: Spartan;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
