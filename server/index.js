@@ -47,14 +47,14 @@ app.post("/signup", (req, res) => {
 app.get("/", (req, res) => {
     // db.query("INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password) VALUES ('Ryan', 'Barry', 'Rybeardawg', 'rbarry@gmail.com', 'He/Him', '2002-01-16', 'Password');", (err, result) => {
     // db.query("DELETE FROM users WHERE UserID = 4;", (err, result) => {
-    db.query("SELECT FROM users WHERE UserID = 2;", (err, result) => {
-
-        if (err) {
-            console.log(err);
-        } else {
-            res.send(result);
-        }
-    });
+    // db.query("SELECT FROM users WHERE UserID = 2;", (err, result) => {
+    // db.query("UPDATE users SET FirstName = 'Alfred', UserName = 'Frankfurt' WHERE UserID = 2;", (err, result) => {
+    //     if (err) {
+    //         console.log(err);
+    //     } else {
+    //         res.send(result);
+    //     }
+    // });
 });
 
 app.put("/update", (req, res) => {

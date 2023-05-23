@@ -110,7 +110,7 @@ function App() {
               <div className="input-group col-lg-6 mb-4">
                 <input
                   id="passwordConfirmation"
-                  type="text"
+                  type="password"
                   name="passwordConfirmation"
                   placeholder="Confirm Password"
                   className="form-control bg-white border-left-0 border-md"
@@ -144,7 +144,7 @@ function App() {
               {/* <!-- Already Registered --> */}
               <div className="text-center w-100">
                 <p className="text-muted font-weight-bold">
-                  Already Registered?
+                  Already Registered?&nbsp;
                   <a href="this.props.url" className="text-primary ml-2">Login</a>
                 </p>
               </div>
