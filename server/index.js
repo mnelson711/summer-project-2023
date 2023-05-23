@@ -13,7 +13,7 @@ var db = mysql.createConnection({
     password: 'AVNS_ScmoB1Kr9TtZ8e4UbcW',
     host: 'db-mysql-nyc1-14138-spectrum-do-user-14136635-0.b.db.ondigitalocean.com',
     port: '25060',
-    database: 'defaultdb',
+    database: 'spectrum',
     sslmode: 'REQUIRED',
 });
 
@@ -45,7 +45,10 @@ app.post("/signup", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    db.query("INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password) VALUES ('Ryan', 'Barry', 'Rybeardawg', 'rbarry@gmail.com', 'He/Him', '2002-04-26', 'Password');", (err, result) => {
+    // db.query("INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password) VALUES ('Ryan', 'Barry', 'Rybeardawg', 'rbarry@gmail.com', 'He/Him', '2002-01-16', 'Password');", (err, result) => {
+    // db.query("DELETE FROM users WHERE UserID = 4;", (err, result) => {
+    db.query("SELECT FROM users WHERE UserID = 2;", (err, result) => {
+
         if (err) {
             console.log(err);
         } else {
