@@ -3,6 +3,9 @@ const app = express();
 const mysql = require("mysql");
 // const cors = require("cors");
 const { createHash } = require('crypto');
+const userdao = require('./userdao');
+const threaddao = require('./threaddao');
+const commentdao = require('./commentdao');
 
 
 // app.use(cors());
@@ -46,15 +49,38 @@ app.post("/signup", (req, res) => {
 
 app.get("/", (req, res) => {
     // db.query("INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password) VALUES ('Ryan', 'Barry', 'Rybeardawg', 'rbarry@gmail.com', 'He/Him', '2002-01-16', 'Password');", (err, result) => {
-    // db.query("DELETE FROM users WHERE UserID = 4;", (err, result) => {
-    // db.query("SELECT FROM users WHERE UserID = 2;", (err, result) => {
-    // db.query("UPDATE users SET FirstName = 'Alfred', UserName = 'Frankfurt' WHERE UserID = 2;", (err, result) => {
+    // // db.query("DELETE FROM users WHERE UserID = 4;", (err, result) => {
+    // // db.query("SELECT FROM users WHERE UserID = 2;", (err, result) => {
+    // // db.query("UPDATE users SET FirstName = 'Alfred', UserName = 'Frankfurt' WHERE UserID = 2;", (err, result) => {
     //     if (err) {
     //         console.log(err);
     //     } else {
     //         res.send(result);
     //     }
     // });
+
+    //testing daos below:
+    const u = {
+        FirstName:"MOLLY",
+        LastName:"NELSON",
+        Username:"mkn123",
+        Email:"@gmail.com",
+        Pronoun:"She/Her",
+        DOB:"2002-06-11",
+        Password:"12345"
+    };
+    //userdao.insertUser("hello");
+    //userdao.changeUser(u,7);
+    //userdao.deleteUser('mnelson');
+    const t = {
+        Description:"first thread on website",
+        Author:"molly",
+        CreationDate:"2023-5-23",
+        CommentCount:0
+    };
+    //threaddao.insertThread(t);
+    //threaddao.deleteThread(1);
+    //threaddao.updateCommentCount(2);
 });
 
 app.put("/update", (req, res) => {
@@ -95,8 +121,8 @@ app.delete("/delete/:userid", (req, res) => {
     });
 });
 
-app.listen(3001, () => {
-    console.log("On port 3001");
+app.listen(3002, () => {
+    console.log("On port 3002");
 });
 
 
