@@ -70,10 +70,40 @@ function updateCommentCount(_threadID) { //add one each time a new comment is ma
     
     console.log("update commentcount ran");
 }
+function addTag(addedTag, ThreadID) {
+    db.query(
+        "SELECT tags FROM threads WHERE ThreadID = ?",
+        ThreadID,
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } else {
+                var newtag = result[0]+ " , " + addedTag;
+                db.query(
+                "UPDATE threads SET tags = ? WHERE ThreadID = ?",
+                [newtag, ThreadID],
+                (err, result) => {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.send(result);
+                    }
+                }
+            );
+            res.send(result);
+            }
+        }
+    )
+}
 
+function removeTag(tag, ThreadID) {
+
+}
 module.exports = {
     //selectThread,
     insertThread,
     deleteThread,
     updateCommentCount,
+    addTag,
+    removeTag
 }

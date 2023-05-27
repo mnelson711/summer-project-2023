@@ -13,14 +13,47 @@ const db = mysql.createConnection({
     sslmode: 'REQUIRED',
 });
 
-// function selectUser(userID) {//grab a user
+function selectByUserID(userID) {//grab a users info by their ID
+    db.query(
+        "SELECT * FROM users WHERE userID = ?",
+        userID,
+        (err, res) => {
+            if (err) {
+                console.log(err);
+            } else  {
+                res.send(result);
+            }
+        }
+    )
+    console.log("select user by ID ran");
+}
 
-// }
+function selectByUsername(username) {//grab a users info by their ID
+    db.query(
+        "SELECT * FROM users WHERE Username = ?",
+        username,
+        (err, res) => {
+            if (err) {
+                console.log(err);
+            } else  {
+                res.send(result);
+            }
+        }
+    )
+    console.log("select user by username ran");
+}
 
 function insertUser(user) {//this will insert a user into the database
+    const FirstName = user.FirstName;
+    const LastName = user.LastName;
+    const Username = user.Username;
+    const Email = user.Email;
+    const Pronoun = user.Pronoun;
+    const DOB = user.DOB;
+    const Password = user.Password;
     db.query(
         "INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password) VALUES (?,?,?,?,?,?,?)",
-        ["molly", "nelson", "mnelson", "mollyynelson@gmail.com", "she/her", "2002-06-11", "123", 'img.png'],
+        [FirstName, LastName, Username, Email, Pronoun, DOB, Password, 'img.png'],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -61,9 +94,25 @@ function changeUser(user,userid) {
     );
     console.log("update user function ran");
 }
+
+function changePassword(newpass, userID) {
+    db.query(
+        "UPDATE users SET Password = ? WHERE userid = ?",
+        [newpass, userID],
+        (err, result) => {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log("password successfully changes");
+            }
+        }
+    )
+}
 module.exports = {
-    //selectUser,
+    selectByUsername,
+    selectByUserID,
     insertUser,
     deleteUser,
-    changeUser
+    changeUser,
+    changePassword,
 };
