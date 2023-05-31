@@ -10,9 +10,16 @@ const db = mysql.createConnection({
     database: 'spectrum',
     sslmode: 'REQUIRED',
 });
-// function selectThread(ThreadID) {
-
-// }
+function selectThread(ThreadID) {
+    db.query("SELECT * FROM threads WHERE ThreadID = ?", ThreadID, (err, res) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+    console.log("select thread by ID ran");
+}
 
 function insertThread(thread) {//create a new thread
     var Description = thread.Description;
@@ -100,7 +107,7 @@ function removeTag(tag, ThreadID) {
 
 }
 module.exports = {
-    //selectThread,
+    selectThread,
     insertThread,
     deleteThread,
     updateCommentCount,

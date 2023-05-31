@@ -29,9 +29,14 @@ function insertComment(comment) {
     console.log("createComment ran");
 }
 function selectCommentByID(commentID) {
-    db.query(
-
-    );
+    db.query("SELECT * FROM comment WHERE idcomment = ?", commentID, (err, res) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send(result);
+        }
+    });
+    console.log("select comment by ID ran");
 }
 
 function deleteComment(commentID) {
@@ -63,6 +68,7 @@ function editComment(comment) { //change the content of the comment
 }
 module.exports = {
     insertComment,
+    selectCommentByID,
     deleteComment,
     editComment
 }
