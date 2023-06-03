@@ -13,9 +13,10 @@ export default function Home() {
                     <nav id="navbar" class="navbar">
                         <ul>
                             <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
-                            <li><a class="nav-link scrollto" href="#about">About</a></li>
-                            <li><a class="nav-link scrollto" href="#team">Team</a></li>
-                            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                            <li><a class="nav-link" href="#about">Threads</a></li>
+                            <li><a class="nav-link" href="#team">Guidelines</a></li>
+                            <li><a class="nav-link" href="#contact">Profile</a></li>
+                            <li><a class="nav-link" href="#contact">Contact</a></li>
                             <li class="dropdown">
                                 <a href="#"><span>Start Chatting</span> <i class="bi bi-chevron-down"></i></a>
                                 <ul>
@@ -372,9 +373,9 @@ export default function Home() {
                                                         <p>+1 558 554 5555  </p>
                                                     </div>
 
-                                                    <iframe
+                                                    {/* <iframe
                                                         src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-                                                        frameborder="0" style="border: 0; width: 100%; height: 290px" allowfullscreen></iframe>
+                                                        frameborder="0" style="border: 0; width: 100%; height: 290px" allowfullscreen></iframe> */}
                                                 </div>
                                             </div>
 
@@ -733,9 +734,9 @@ export default function Home() {
                                         <p>+1 558 554 5555  </p>
                                     </div>
 
-                                    <iframe
+                                    {/* <iframe
                                         src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
-                                        frameborder="0" style="border: 0; width: 100%; height: 290px" allowfullscreen></iframe>
+                                        frameborder="0" style="border: 0; width: 100%; height: 290px" allowfullscreen></iframe> */}
                                 </div>
                             </div>
 
