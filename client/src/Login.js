@@ -28,7 +28,7 @@ export default function Login() {
       .then(function (response) {
         console.log(response);
         if (response.data.success) {
-          navigate("/vote");
+          navigate("/");
         }
       })
       .catch(function (error) {
@@ -59,7 +59,7 @@ export default function Login() {
         password:
         <input
           id="password-field"
-          type="text"
+          type="password"
           placeholder="Enter Password Here"
           name="password"
           value={password}
