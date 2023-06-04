@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import Axios from "axios";
 import "./index.css";
 
 export default function Login() {
-  const [userid, setUserid] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   // event handler for changes to userid text field
   const handleUseridInputChange = (event) => {
-    setUserid(event.target.value);
+    setUsername(event.target.value);
   };
 
   // event handler for changes to password text field
@@ -20,9 +20,9 @@ export default function Login() {
 
   // event handler for submit button pressed
   const handleSubmitButtonOnClick = (event) => {
-    axios
+    Axios
       .post("/api/login", {
-        userid: userid,
+        username: username,
         password: password,
       })
       .then(function (response) {
@@ -36,10 +36,14 @@ export default function Login() {
       });
   };
 
+  const handleSignupButtonOnClick = (event) => {
+    navigate('/signup');
+  };
+
   // react to change to userid or password state
   useEffect(() => {
-    console.log("userid: " + userid, "password: ", password);
-  }, [userid, password]);
+    console.log("username: " + username, "password: ", password);
+  }, [username, password]);
 
   return (
     <>
@@ -47,11 +51,11 @@ export default function Login() {
       <p>
         userid:
         <input
-          id="userid-field"
+          id="username-field"
           type="text"
-          placeholder="Enter Userid Here"
-          name="userid"
-          value={userid}
+          placeholder="Enter Username Here"
+          name="username"
+          value={username}
           onChange={handleUseridInputChange}
         />
       </p>
@@ -67,7 +71,12 @@ export default function Login() {
         />
       </p>
       <button id="submit-button" onClick={handleSubmitButtonOnClick}>
-        submit
+        Login
+      </button>
+      <button id="signup"
+        onClick={handleSignupButtonOnClick}
+      >
+        Signup
       </button>
     </>
   );

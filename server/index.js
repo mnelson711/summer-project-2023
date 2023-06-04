@@ -1,14 +1,14 @@
 const express = require("express");
 const app = express();
 const mysql = require("mysql");
-// const cors = require("cors");
+const cors = require("cors");
 const { createHash } = require('crypto');
 const userdao = require('./userdao');
 const threaddao = require('./threaddao');
 const commentdao = require('./commentdao');
 
 
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
 
 var db = mysql.createConnection({
@@ -20,23 +20,41 @@ var db = mysql.createConnection({
     sslmode: 'REQUIRED',
 });
 
+// app.post("/signup", (req, res) => {
+//     const FirstName = req.body.firstname;
+//     const LastName = req.body.lastname;
+//     const Username = req.body.Username;
+//     const Email = req.body.Email;
+//     const Pronoun = req.body.Pronoun;
+//     const DOB = req.body.dob;
+//     const Password = req.body.Password;
+//     const confirmPassword = req.body.confirmpassword;
+//     if (Password != confirmPassword) {
+//         res.send("Password and Confirm Password do not match");
+//     }
+//     Password = hash(Password);
+
+//     db.query(
+//         "INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password) VALUES (?,?,?,?,?,?)",
+//         [FirstName, LastName, Username, Email, Pronoun, DOB, Password],
+//         (err, result) => {
+//             if (err) {
+//                 console.log(err);
+//             } else {
+//                 res.send("Values Inserted");
+//             }
+//         }
+//     );
+// });
+
 app.post("/signup", (req, res) => {
-    const FirstName = req.body.firstname;
-    const LastName = req.body.lastname;
-    const Username = req.body.Username;
-    const Email = req.body.Email;
-    const Pronoun = req.body.Pronoun;
-    const DOB = req.body.dob;
-    const Password = req.body.Password;
-    const confirmPassword = req.body.confirmpassword;
-    if (Password != confirmPassword) {
-        res.send("Password and Confirm Password do not match");
-    }
+    const Username = req.body.username;
+    const Password = req.body.password;
     Password = hash(Password);
 
     db.query(
-        "INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password) VALUES (?,?,?,?,?,?)",
-        [FirstName, LastName, Username, Email, Pronoun, DOB, Password],
+        "INSERT INTO users (Username, Password) VALUES (?,?)",
+        [Username, Password],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -61,22 +79,22 @@ app.get("/", (req, res) => {
 
     //testing daos below:
     const u = {
-        FirstName:"MOLLY",
-        LastName:"NELSON",
-        Username:"mkn123",
-        Email:"@gmail.com",
-        Pronoun:"She/Her",
-        DOB:"2002-06-11",
-        Password:"12345"
+        FirstName: "MOLLY",
+        LastName: "NELSON",
+        Username: "mkn123",
+        Email: "@gmail.com",
+        Pronoun: "She/Her",
+        DOB: "2002-06-11",
+        Password: "12345"
     };
     //userdao.insertUser("hello");
     //userdao.changeUser(u,7);
     //userdao.deleteUser('mnelson');
     const t = {
-        Description:"first thread on website",
-        Author:"molly",
-        CreationDate:"2023-5-23",
-        CommentCount:0
+        Description: "first thread on website",
+        Author: "molly",
+        CreationDate: "2023-5-23",
+        CommentCount: 0
     };
     //threaddao.insertThread(t);
     //threaddao.deleteThread(1);

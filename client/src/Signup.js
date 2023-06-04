@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import Axios from "axios";
 import "./index.css";
 // doorbrother-garbosystem
 export default function Signup() {
-  const [userid, setUserid] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   // event handler for changes to userid text field
   const handleUseridInputChange = (event) => {
-    setUserid(event.target.value);
+    setUsername(event.target.value);
   };
 
   // event handler for changes to password text field
@@ -18,11 +18,15 @@ export default function Signup() {
     setPassword(event.target.value);
   };
 
+  const handleLoginButtonOnClick = (event) => {
+    navigate('/login');
+  };
+
   // event handler for submit button pressed
   const handleSubmitButtonOnClick = (event) => {
-    axios
+    Axios
       .post("/api/signup", {
-        userid: userid,
+        username: username,
         password: password,
       })
       .then(function (response) {
@@ -38,8 +42,8 @@ export default function Signup() {
 
   // react to change to userid or password state
   useEffect(() => {
-    console.log("userid: " + userid, "password: ", password);
-  }, [userid, password]);
+    console.log("username: " + username, "password: ", password);
+  }, [username, password]);
 
   return (
     <>
@@ -47,11 +51,11 @@ export default function Signup() {
       <p>
         userid:
         <input
-          id="userid-field"
+          id="username-field"
           type="text"
-          placeholder="Enter Userid Here"
-          name="userid"
-          value={userid}
+          placeholder="Enter Username Here"
+          name="username"
+          value={username}
           onChange={handleUseridInputChange}
         />
       </p>
@@ -68,6 +72,9 @@ export default function Signup() {
       </p>
       <button id="submit-button" onClick={handleSubmitButtonOnClick}>
         submit
+      </button>
+      <button id="submit-button" onClick={handleLoginButtonOnClick}>
+        Back to Login
       </button>
     </>
   );
