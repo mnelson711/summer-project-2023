@@ -1,73 +1,90 @@
-/*
-*
-* ==========================================
-* CUSTOM UTIL CLASSES
-* ==========================================
-*
-*/
-
 @font-face {
   font-family: Spartan;
   src: url(./LeagueSpartan-Regular.ttf);
 }
 
 * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: Spartan;
+  background: no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
-
-.border-md {
-  border-width: 2px;
-}
-
-.btn-facebook {
-  background: #405D9D;
-  border: none;
-}
-
-.btn-facebook:hover,
-.btn-facebook:focus {
-  background: #314879;
-}
-
-.btn-twitter {
-  background: #42AEEC;
-  border: none;
-}
-
-.btn-twitter:hover,
-.btn-twitter:focus {
-  background: #1799e4;
-}
-
-
-
-/*
-*
-* ==========================================
-* FOR DEMO PURPOSES
-* ==========================================
-*
-*/
 
 body {
-  min-height: 100vh;
+  overflow: hidden;
 }
 
-.form-control:not(select) {
-  padding: 1.5rem 0.5rem;
+.pronouns {
+  background-color: white;
+  border-radius: .4rem;
+  height: 2.5rem;
 }
 
-select.form-control {
-  height: 52px;
-  padding-left: 0.5rem;
+.subheader {
+  font-size: 2rem;
+  font-weight: 700;
+  color: hsl(218, 81%, 75%);
+  text-align: center;
+  @media (max-width: 768px) {
+    display: None;
+  }
 }
 
-.form-control::placeholder {
-  color: #ccc;
-  font-weight: bold;
-  font-size: 0.9rem;
+.margin {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  @media (max-width: 768px) {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
 }
 
-.form-control:focus {
-  box-shadow: none;
+.background-radial-gradient {
+  background-color: hsl(218, 41%, 15%);
+  background-image: radial-gradient(
+      650px circle at 0% 0%,
+      hsl(218, 41%, 35%) 15%,
+      hsl(218, 41%, 30%) 35%,
+      hsl(218, 41%, 20%) 75%,
+      hsl(218, 41%, 19%) 80%,
+      transparent 100%
+    ),
+    radial-gradient(
+      1250px circle at 100% 100%,
+      hsl(218, 41%, 45%) 15%,
+      hsl(218, 41%, 30%) 35%,
+      hsl(218, 41%, 20%) 75%,
+      hsl(218, 41%, 19%) 80%,
+      transparent 100%
+    );
+}
+
+#radius-shape-1 {
+  height: 220px;
+  width: 220px;
+  top: -60px;
+  left: -130px;
+  background: radial-gradient(#44006b, #ad1fff);
+  overflow: hidden;
+}
+
+#radius-shape-2 {
+  border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+  bottom: -60px;
+  right: -110px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(#44006b, #ad1fff);
+  overflow: hidden;
+}
+
+.bg-glass {
+  background-color: hsla(0, 0%, 100%, 0.7) !important;
+  backdrop-filter: saturate(200%) blur(25px);
 }
