@@ -3,6 +3,7 @@ import "./bootstrap.min.css";
 import React from "react";
 // import * as ReactDOM from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 import Home from "./Home";
 import Login from "./Login";
 import Signup from "./Signup";
@@ -17,6 +18,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         {/* <Route path="/threads" element={<Threads data={threads} />} />

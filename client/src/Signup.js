@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Axios from "axios";
+import axios from "axios";
 import './index.css';
 import './bootstrap.min.css';
 import {
@@ -18,50 +18,47 @@ import {
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
-// doorbrother-garbosystem
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import { useCookies } from 'react-cookie';
 
-
-function Signup() {
+export default function Signup() {
+  const [fname, setfname] = useState("");
+  const [lname, setlname] = useState("");
   const [username, setUsername] = useState("");
+  const [dob, setdob] = useState("");
+  const [email, setEmail] = useState("");
+  const [pronouns, setPronouns] = useState("");
+  const handleChange = (event) => {
+    setPronouns(event.target.value);
+  };
   const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(['username']);
 
-  // event handler for changes to userid text field
-  const handleUseridInputChange = (event) => {
-    setUsername(event.target.value);
+  const handle = () => {
+    setCookie('username', username, { path: '/' });
   };
 
-  // event handler for changes to password text field
-  const handlePasswordInputChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleLoginButtonOnClick = (event) => {
-    navigate('/login');
-  };
-
-  // event handler for submit button pressed
-  const handleSubmitButtonOnClick = (event) => {
-    Axios
-      .post("/api/signup", {
-        username: username,
-        password: password,
-      })
-      .then(function (response) {
-        console.log(response);
-        if (response.data.success) {
-          navigate("/login");
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  // react to change to userid or password state
-  useEffect(() => {
-    console.log("username: " + username, "password: ", password);
-  }, [username, password]);
+  const Signup = () => {
+    axios.post("http://localhost:3001/signup", {
+      fname: fname,
+      lname: lname,
+      username: username,
+      dob: dob,
+      email: email,
+      pronouns: pronouns,
+      password: password,
+      confirmpassword: confirmpassword
+    }).then((response) => {
+      navigate('/login');
+      console.log(response.data);
+    });
+  }
 
   return (
     <body>
@@ -78,35 +75,40 @@ function Signup() {
             <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>
             <MDBCard className='my-5 bg-glass'>
               <MDBCardBody className='p-5'>
+                {/* First & Last Name */}
                 <MDBRow>
                   <MDBCol col='6'>
-                    <MDBInput wrapperClass='mb-4' placeholder='First name' id='form1' type='text' />
+                    <MDBInput wrapperClass='mb-4' placeholder='First name' id='form1' type='text' onChange={(e) => { setfname(e.target.value); }} />
                   </MDBCol>
-
                   <MDBCol col='6'>
-                    <MDBInput wrapperClass='mb-4' placeholder='Last name' id='form2' type='text' />
+                    <MDBInput wrapperClass='mb-4' placeholder='Last name' id='form2' type='text' onChange={(e) => { setlname(e.target.value); }} />
                   </MDBCol>
                 </MDBRow>
-                <MDBInput wrapperClass='mb-4' placeholder='Username' id='form3' type='text' />
-                <MDBInput wrapperClass='mb-4' placeholder='Date of Birth' id='form4' type='date' />
-                <MDBInput wrapperClass='mb-4' placeholder='Email' id='form5' type='email' />
-                <div className="form-outline mb-4 pronouns">
-                  <select name="dog-names" id="Pronouns">
-                    <option value="None">Select</option>
-                    <option value="They/Them">They/Them</option>
-                    <option value="He/Him">He/Him</option>
-                    <option value="She/Her">She/Her</option>
-                    <option value="Xe/Xur">Xe/Xur</option>
-                  </select>
-                </div>
+                {/* Username */}
+                <MDBInput wrapperClass='mb-4' placeholder='Username' id='form3' type='text' onChange={(e) => { setUsername(e.target.value); }} />
+                {/* Date of Birth */}
+                <MDBInput wrapperClass='mb-4' placeholder='Date of Birth' id='form4' type='date' onChange={(e) => { setdob(e.target.value); }} />
+                {/* Email */}
+                <MDBInput wrapperClass='mb-4' placeholder='Email' id='form5' type='email' onChange={(e) => { setEmail(e.target.value); }} />
+                {/* Pronouns */}
+                <Box className="mb-4">
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Pronouns</InputLabel>
+                    <Select onChange={handleChange} >
+                      <MenuItem value={"They/Them"}>They/Them</MenuItem>
+                      <MenuItem value={"He/Him"}>He/Him</MenuItem>
+                      <MenuItem value={"She/Her"}>She/Her</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+                {/* Password */}
+                <MDBInput wrapperClass='mb-4' placeholder='Password' id='form6' type='password' onChange={(e) => { setPassword(e.target.value); }} />
+                <MDBInput wrapperClass='mb-4' placeholder='Confirm Password' id='form7' type='password' onChange={(e) => { setConfirmPassword(e.target.value); }} />
 
-
-                <MDBInput wrapperClass='mb-4' placeholder='Password' id='form6' type='password' />
-                <MDBInput wrapperClass='mb-4' placeholder='Confirm Password' id='form7' type='password' />
                 <div className='d-flex justify-content-center mb-4'>
                   <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' required label='Agree to&nbsp;' /> <a href="#"> Terms and Conditions</a>
                 </div>
-                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md'>sign up</button>
+                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={Signup}>sign up</button>
                 <div className="text-center">
                   <p className="mb-3 mt-4">have an account?</p>
                   <MDBRow>
@@ -132,6 +134,3 @@ function Signup() {
     </body>
   );
 }
-
-
-export default Signup;
