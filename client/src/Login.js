@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import "./index.css";
+import "./index.css";
 import './index.css';
 import './bootstrap.min.css';
 import {
@@ -17,9 +21,43 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 
-function Login() {
+export default function Login() {
 
-  
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const [loginStatus, setLoginStatus] = useState("");
+
+  // event handler for changes to userid text field
+  const handleUseridInputChange = (event) => {
+    setUsername(event.target.value);
+  };
+
+  // event handler for changes to password text field
+  const handlePasswordInputChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const login = () => {
+    axios.post("http://localhost:3001/login", {
+      username: username,
+      password: password
+    }).then((response) => {
+      if (response.data.message) {
+        setLoginStatus(response.data.message)
+      }
+      else {
+        setLoginStatus(response.data[0].username);
+      }
+      console.log(response.data);
+    });
+  };
+
+  // react to change to userid or password state
+  useEffect(() => {
+    console.log('username: ' + username, 'password: ', password)
+  }, [username, password]);
+
   return (
     <body>
       <MDBContainer fluid className='p-4 background-radial-gradient overflow-hidden'>
@@ -35,9 +73,10 @@ function Login() {
             <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>
             <MDBCard className='my-5 bg-glass'>
               <MDBCardBody className='p-5'>
-                <MDBInput wrapperClass='mb-4' placeholder='Email' id='form3' type='email' />
-                <MDBInput wrapperClass='mb-4' placeholder='Password' id='form4' type='password' />
-                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md'>sign in</button>
+                <MDBInput wrapperClass='mb-4' placeholder='Email' id='form3' type='email' onChange={(e) => { setUsername(e.target.value); }} />
+                <MDBInput wrapperClass='mb-4' placeholder='Password' id='form4' type='password' onChange={(e) => { setPassword(e.target.value); }} />
+                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={login}>sign in</button>
+                <p>{loginStatus}</p>
                 <div className="text-center">
                   <p>or login with</p>
                   <MDBBtn tag='a' color='none' className='margin' style={{ color: '#1266f1' }}>
@@ -80,5 +119,3 @@ function Login() {
     </body>
   );
 }
-
-export default Login;

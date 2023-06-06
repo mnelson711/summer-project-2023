@@ -7,11 +7,10 @@ const userdao = require('./userdao');
 const threaddao = require('./threaddao');
 const commentdao = require('./commentdao');
 
-
 app.use(cors());
 app.use(express.json());
 
-var db = mysql.createConnection({
+const db = mysql.createConnection({
     user: 'doadmin',
     password: 'AVNS_ScmoB1Kr9TtZ8e4UbcW',
     host: 'db-mysql-nyc1-14138-spectrum-do-user-14136635-0.b.db.ondigitalocean.com',
@@ -101,6 +100,27 @@ app.get("/", (req, res) => {
     //threaddao.updateCommentCount(2);
 });
 
+app.post("/login", (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    db.query(
+        "SELECT * FROM users WHERE Username = ? AND Password = ?",
+        [username, password],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send({ message: "Wrong username/password combination!" });
+            }
+
+        }
+    );
+});
+
 app.put("/update", (req, res) => {
     if (req.body.firstname != null) {
         const FirstName = req.body.firstname;
@@ -139,8 +159,8 @@ app.delete("/delete/:userid", (req, res) => {
     });
 });
 
-app.listen(3002, () => {
-    console.log("On port 3002");
+app.listen(3001, () => {
+    console.log("On port 3001");
 });
 
 
