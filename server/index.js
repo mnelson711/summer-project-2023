@@ -23,6 +23,46 @@ function hash(string) {
     return createHash('sha256').update(string).digest('hex');
 }
 
+app.post("/selectByUserName", (req, res) => {
+    const username = req.body.username;
+    res.json(db.query(
+        "SELECT * FROM users WHERE Username = ?",
+        [username],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+        }
+    ));
+});
+
+app.post("/selectByEmail", (req, res) => {
+    const email = req.body.email;
+    res.json(db.query(
+        "SELECT * FROM users WHERE Email = ?",
+        [email],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+        }
+    ));
+});
+
+app.get('/profile', (req, res) => {
+    const query = 'SELECT * FROM users WHERE id = ?';
+    connection.query(query, [1], (err, results) => {
+        if (err) {
+            console.error('Error querying the database:', err);
+            res.sendStatus(500);
+        } else {
+            const userInfo = results[0];
+            res.json(userInfo);
+        }
+    });
+});
+
+
 app.post("/signup", (req, res) => {
     const FirstName = req.body.fname;
     const LastName = req.body.lname;
@@ -31,15 +71,12 @@ app.post("/signup", (req, res) => {
     const Email = req.body.email;
     const Pronoun = req.body.pronouns;
     const Password = req.body.password;
-    const confirmPassword = req.body.confirmpassword;
-    // if (Password != confirmPassword) {
-    //     res.send("Password and Confirm Password do not match!");
-    // }
-    // Password = hash(Password);
-    
+
+    const hashed = hash(Password);
+
     db.query(
         "INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password) VALUES (?,?,?,?,?,?,?)",
-        [FirstName, LastName, Username, Email, Pronoun, DOB, Password],
+        [FirstName, LastName, Username, Email, Pronoun, DOB, hashed],
         (err, result) => {
             if (err) {
                 res.send({ err: err });
@@ -49,7 +86,6 @@ app.post("/signup", (req, res) => {
             } else {
                 res.send({ message: "Unsuccessful" });
             }
-
         }
     );
 });

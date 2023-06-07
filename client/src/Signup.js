@@ -23,6 +23,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Alert from '@mui/material/Alert';
 import { useCookies } from 'react-cookie';
 
 export default function Signup() {
@@ -37,6 +38,7 @@ export default function Signup() {
   };
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
+
   const navigate = useNavigate();
   const [cookies, setCookie] = useCookies(['username']);
 
@@ -53,11 +55,56 @@ export default function Signup() {
       email: email,
       pronouns: pronouns,
       password: password,
-      confirmpassword: confirmpassword
     }).then((response) => {
+      <Alert severity="success">Account successfully created</Alert>
       navigate('/login');
       console.log(response.data);
     });
+  }
+
+  function alert(username, email, password, confirmpassword) {
+    var strUsername, strEmail, strPassword, strConfirmPassword;
+    strUsername = String(username);
+    strEmail = String(email);
+    strPassword = String(password);
+    strConfirmPassword = String(confirmpassword);
+    if (strPassword.length < 8) {
+      console.log(strPassword.length);
+      return <Alert severity="error">Password must be at least 8 characters long!</Alert>
+    }
+    if (strPassword.search(/[a-z]/) < 0) {
+      console.log(strPassword.search(/[a-z]/));
+      return <Alert severity="error">Password must contain at least one lowercase letter!</Alert>
+    }
+    if (strPassword.search(/[A-Z]/) < 0) {
+      console.log(strPassword.search(/[A-Z]/));
+      return <Alert severity="error">Password must contain at least one uppercase letter!</Alert>
+    }
+    if (strPassword.search(/[0-9]/) < 0) {
+      console.log(strPassword.search(/[0-9]/));
+      return <Alert severity="error">Password must contain at least one number!</Alert>
+    }
+    if (strPassword != strConfirmPassword) {
+      console.log(strPassword, strConfirmPassword);
+      return <Alert severity="error">Password and Confirm Password do not match!</Alert>
+    }
+    axios.post("http://localhost:3001/selectByUserName", {
+      username: username,
+    }).then((response) => {
+      if (response.data.length > 0) {
+        console.log(response.data);
+        return <Alert severity="error">Username already in use!</Alert>
+      }
+    });
+    axios.post("http://localhost:3001/selectByEmail", {
+      email: email,
+    }).then((response) => {
+      console.log(response.data);
+      if (response.data.length > 0) {
+        return <Alert severity="error">Email already in use!</Alert>
+      }
+    });
+    Signup();
   }
 
   return (
@@ -78,23 +125,23 @@ export default function Signup() {
                 {/* First & Last Name */}
                 <MDBRow>
                   <MDBCol col='6'>
-                    <MDBInput wrapperClass='mb-4' placeholder='First name' id='form1' type='text' onChange={(e) => { setfname(e.target.value); }} />
+                    <MDBInput wrapperClass='mb-4' placeholder='First name' id='form1' type='text' required onChange={(e) => { setfname(e.target.value); }} />
                   </MDBCol>
                   <MDBCol col='6'>
-                    <MDBInput wrapperClass='mb-4' placeholder='Last name' id='form2' type='text' onChange={(e) => { setlname(e.target.value); }} />
+                    <MDBInput wrapperClass='mb-4' placeholder='Last name' id='form2' type='text' required onChange={(e) => { setlname(e.target.value); }} />
                   </MDBCol>
                 </MDBRow>
                 {/* Username */}
-                <MDBInput wrapperClass='mb-4' placeholder='Username' id='form3' type='text' onChange={(e) => { setUsername(e.target.value); }} />
+                <MDBInput wrapperClass='mb-4' placeholder='Username' id='form3' type='text' required onChange={(e) => { setUsername(e.target.value); }} />
                 {/* Date of Birth */}
-                <MDBInput wrapperClass='mb-4' placeholder='Date of Birth' id='form4' type='date' onChange={(e) => { setdob(e.target.value); }} />
+                <MDBInput wrapperClass='mb-4' placeholder='Date of Birth' id='form4' type='date' required onChange={(e) => { setdob(e.target.value); }} />
                 {/* Email */}
-                <MDBInput wrapperClass='mb-4' placeholder='Email' id='form5' type='email' onChange={(e) => { setEmail(e.target.value); }} />
+                <MDBInput wrapperClass='mb-4' placeholder='Email' id='form5' type='email' required onChange={(e) => { setEmail(e.target.value); }} />
                 {/* Pronouns */}
                 <Box className="mb-4">
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Pronouns</InputLabel>
-                    <Select onChange={handleChange} >
+                    <Select required onChange={handleChange} >
                       <MenuItem value={"They/Them"}>They/Them</MenuItem>
                       <MenuItem value={"He/Him"}>He/Him</MenuItem>
                       <MenuItem value={"She/Her"}>She/Her</MenuItem>
@@ -102,13 +149,13 @@ export default function Signup() {
                   </FormControl>
                 </Box>
                 {/* Password */}
-                <MDBInput wrapperClass='mb-4' placeholder='Password' id='form6' type='password' onChange={(e) => { setPassword(e.target.value); }} />
-                <MDBInput wrapperClass='mb-4' placeholder='Confirm Password' id='form7' type='password' onChange={(e) => { setConfirmPassword(e.target.value); }} />
+                <MDBInput wrapperClass='mb-4' placeholder='Password' id='form6' type='password' required onChange={(e) => { setPassword(e.target.value); }} />
+                <MDBInput wrapperClass='mb-4' placeholder='Confirm Password' id='form7' type='password' required onChange={(e) => { setConfirmPassword(e.target.value); }} />
 
                 <div className='d-flex justify-content-center mb-4'>
                   <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' required label='Agree to&nbsp;' /> <a href="#"> Terms and Conditions</a>
                 </div>
-                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={Signup}>sign up</button>
+                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={alert}>sign up</button>
                 <div className="text-center">
                   <p className="mb-3 mt-4">have an account?</p>
                   <MDBRow>

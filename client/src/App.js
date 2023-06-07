@@ -7,11 +7,10 @@ import { useCookies } from 'react-cookie';
 import Home from "./Home";
 import Login from "./Login";
 import Signup from "./Signup";
-// import Threads from "./Threads";
-// import IndividualThread from "./individualthread";
-// import Guidelines from "./Guidelines";
-// import ProfileView from "./ProfileView";
-// import ProfileEdit from "./ProfileEdit";
+import Threads from "./Threads";
+import IndividualThread from "./IndividualThread";
+import Guidelines from "./Guidelines";
+import Profile from "./Profile";
 
 function App() {
   return (
@@ -21,11 +20,10 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        {/* <Route path="/threads" element={<Threads data={threads} />} />
-          <Route path="/individualthread" element={<IndividualThread data={messages} />} />
-          <Route path="/guidelines" element={<Guidelines />} />
-          <Route path="/profileview" element={<ProfileView />} />
-          <Route path="/profileedit" element={<ProfileEdit />} /> */}
+        <Route path="/threads" element={<Threads />} />
+        <Route path="/individualthread" element={<IndividualThread />} />
+        <Route path="/guidelines" element={<Guidelines />} />
+        <Route path="/profileview" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
