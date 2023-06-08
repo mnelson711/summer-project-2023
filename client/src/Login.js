@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { useCookies } from 'react-cookie';
 import "./index.css";
 import "./index.css";
 import './index.css';
@@ -27,10 +28,15 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useState("");
+  const [cookies, setCookie] = useCookies(['username']);
 
   // event handler for changes to userid text field
   const handleUseridInputChange = (event) => {
     setUsername(event.target.value);
+  };
+
+  const handle = () => {
+    setCookie('username', username, { path: '/' });
   };
 
   // event handler for changes to password text field
@@ -42,12 +48,14 @@ export default function Login() {
     axios.post("http://localhost:3001/login", {
       username: username,
       password: password
+
     }).then((response) => {
       if (response.data.message) {
         setLoginStatus(response.data.message)
       }
       else {
         setLoginStatus(response.data[0].username);
+        navigate('/home');
       }
       console.log(response.data);
     });
