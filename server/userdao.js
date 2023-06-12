@@ -28,7 +28,7 @@ function selectByUserID(userID) {//grab a users info by their ID
     console.log("select user by ID ran");
 }
 
-function selectByUsername(username) {//grab a users info by their ID
+function selectByUsername(username, req, res) {//grab a users info by their ID
     db.query(
         "SELECT * FROM users WHERE Username = ?",
         username,
@@ -37,9 +37,10 @@ function selectByUsername(username) {//grab a users info by their ID
                 console.log(err);
             } else  {
                 res.send(result);
+                console.log(result);
             }
         }
-    )
+    );
     console.log("select user by username ran");
 }
 

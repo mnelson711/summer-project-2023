@@ -50,16 +50,16 @@ app.post("/selectByEmail", (req, res) => {
 });
 
 app.get('/profile', (req, res) => {
-    const query = 'SELECT * FROM users WHERE id = ?';
-    connection.query(query, [1], (err, results) => {
+    db.query("SELECT * FROM users", (err, res) => {
         if (err) {
-            console.error('Error querying the database:', err);
-            res.sendStatus(500);
+            console.log(err);
         } else {
-            const userInfo = results[0];
-            res.json(userInfo);
+            res.send(result);
+            console.log(result);
         }
     });
+    console.log('profile ran');
+    //userdao.selectByUsername("Rybeardawg", res, req);
 });
 
 
