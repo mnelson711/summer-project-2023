@@ -23,7 +23,7 @@ function App() {
         <Route path="/threads" element={<Threads />} />
         <Route path="/individualthread" element={<IndividualThread />} />
         <Route path="/guidelines" element={<Guidelines />} />
-        <Route path="/profileview" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

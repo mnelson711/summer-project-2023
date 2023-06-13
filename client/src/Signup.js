@@ -42,6 +42,8 @@ export default function Signup() {
   const navigate = useNavigate();
   const [cookies, setCookie] = useCookies(['username']);
 
+  const [Alert, setAlert] = useState("");
+
   const handle = () => {
     setCookie('username', username, { path: '/' });
   };
@@ -56,44 +58,49 @@ export default function Signup() {
       pronouns: pronouns,
       password: password,
     }).then((response) => {
-      <Alert severity="success">Account successfully created</Alert>
+      setAlert('<Alert severity="success">Account successfully created</Alert>')
       navigate('/login');
       console.log(response.data);
     });
   }
 
   function alert(username, email, password, confirmpassword) {
-    var strUsername, strEmail, strPassword, strConfirmPassword;
-    strUsername = String(username);
-    strEmail = String(email);
-    strPassword = String(password);
-    strConfirmPassword = String(confirmpassword);
+    var strUsername = String(username);
+    var strEmail = String(email);
+    var strPassword = String(password);
+    var strConfirmPassword = String(confirmpassword);
     if (strPassword.length < 8) {
       console.log(strPassword.length);
-      return <Alert severity="error">Password must be at least 8 characters long!</Alert>
+      setAlert('<Alert severity="error">Password must be at least 8 characters long!</Alert>')
+      return null;
     }
     if (strPassword.search(/[a-z]/) < 0) {
       console.log(strPassword.search(/[a-z]/));
-      return <Alert severity="error">Password must contain at least one lowercase letter!</Alert>
+      setAlert('<Alert severity="error">Password must contain at least one lowercase letter!</Alert>')
+      return null;
     }
     if (strPassword.search(/[A-Z]/) < 0) {
       console.log(strPassword.search(/[A-Z]/));
-      return <Alert severity="error">Password must contain at least one uppercase letter!</Alert>
+      setAlert('<Alert severity="error">Password must contain at least one uppercase letter!</Alert>')
+      return null;
     }
     if (strPassword.search(/[0-9]/) < 0) {
       console.log(strPassword.search(/[0-9]/));
-      return <Alert severity="error">Password must contain at least one number!</Alert>
+      setAlert('<Alert severity="error">Password must contain at least one number!</Alert>')
+      return null;
     }
     if (strPassword != strConfirmPassword) {
       console.log(strPassword, strConfirmPassword);
-      return <Alert severity="error">Password and Confirm Password do not match!</Alert>
+      setAlert('<Alert severity="error">Password and Confirm Password do not match!</Alert>')
+      return null;
     }
     axios.post("http://localhost:3001/selectByUserName", {
       username: username,
     }).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
-        return <Alert severity="error">Username already in use!</Alert>
+        setAlert('<Alert severity="error">Username already in use!</Alert>')
+        return null;
       }
     });
     axios.post("http://localhost:3001/selectByEmail", {
@@ -101,7 +108,8 @@ export default function Signup() {
     }).then((response) => {
       console.log(response.data);
       if (response.data.length > 0) {
-        return <Alert severity="error">Email already in use!</Alert>
+        setAlert('<Alert severity="error">Email already in use!</Alert>')
+        return null;
       }
     });
     Signup();
@@ -156,6 +164,9 @@ export default function Signup() {
                   <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' required label='Agree to&nbsp;' /> <a href="#"> Terms and Conditions</a>
                 </div>
                 <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={alert}>sign up</button>
+                <div className="text-center">
+                  <p className="mb-3 mt-4">{Alert}</p>
+                </div>
                 <div className="text-center">
                   <p className="mb-3 mt-4">have an account?</p>
                   <MDBRow>

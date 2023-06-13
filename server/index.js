@@ -1,11 +1,12 @@
 const express = require("express");
-const app = express();
+var app = express();
 const mysql = require("mysql");
-const cors = require("cors");
+var cors = require("cors");
 const { createHash } = require('crypto');
 const userdao = require('./userdao');
 const threaddao = require('./threaddao');
 const commentdao = require('./commentdao');
+
 
 app.use(cors());
 app.use(express.json());
@@ -25,9 +26,22 @@ function hash(string) {
 
 app.post("/selectByUserName", (req, res) => {
     const username = req.body.username;
-    res.json(db.query(
+    res.json.stringify(db.query(
         "SELECT * FROM users WHERE Username = ?",
         [username],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+        }
+    ));
+});
+
+app.post("/selectByUserID", (req, res) => {
+    const userID = req.body.userID;
+    res.json.stringify(db.query(
+        "SELECT * FROM users WHERE UserID = ?",
+        [userID],
         (err, result) => {
             if (err) {
                 res.send({ err: err });
@@ -49,17 +63,21 @@ app.post("/selectByEmail", (req, res) => {
     ));
 });
 
-app.get('/profile', (req, res) => {
-    db.query("SELECT * FROM users", (err, res) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send(result);
-            console.log(result);
-        }
-    });
+app.post('/profile', (req, res) => {
+    const UserName = req.body.username;
+    const FirstName = req.body.fname;
+    const LastName = req.body.lname;
+    const Pronoun = req.body.pronoun;
+    db.query("UPDATE users SET FirstName = ?, LastName = ?, DOB = ?, Pronoun = ?, WHERE Username = ?;",
+        [FirstName, LastName, DOB, Pronoun, UserName], (err, res) => {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(result);
+                console.log(result);
+            }
+        });
     console.log('profile ran');
-    //userdao.selectByUsername("Rybeardawg", res, req);
 });
 
 

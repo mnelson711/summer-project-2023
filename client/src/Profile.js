@@ -26,105 +26,84 @@ import Alert from "@mui/material/Alert";
 import { useCookies } from "react-cookie";
 
 export default function Profile() {
-    const [userInfo, setUserInfo] = useState([]);
     const [editMode, setEditMode] = useState(false);
+    const userID = useCookies("userID")[0];
     const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [name, setName] = useState("");
-    const [bday, setBday] = useState("");
+    const [fname, setfName] = useState("");
+    const [lname, setlName] = useState("");
+    const [pronoun, setPronoun] = useState("");
     const Navigate = useNavigate();
 
-    useEffect(() => {
-        fetchUserInfo();
-    }, []);
-
-    const getInfo = () => {
-        axios.get("http://localhost:3001/profile").then((response) => {
-            setUserInfo(response.data);
+    const userInfo = () => {
+        axios.post("http://localhost:3001/selectByUserID", {
+            userID: userID
+        }).then((response) => {
             console.log(response.data);
         });
     };
 
-    const fetchUserInfo = async () => {
-        // try {
-        //     const response = await fetch('/profile');
-        //     if (response.ok) {
-        //         const data = await response.json();
-        //         setUserInfo(data);
-        //         setName(data.name);
-        //         setEmail(data.email);
-        //     } else {
-        //         console.log('Failed to fetch user info');
-        //     }
-        // } catch (error) {
-        //     console.error('Error occurred while fetching user info:', error);
-        // }
-    };
+    function update() {
+        axios.post("http://localhost:3001/profile", {
+            username: username,
+            fname: fname,
+            lname: lname,
+            pronoun: pronoun,
+        }).then((response) => {
+            console.log(response.data);
+        });
+    }
 
-    const handleEdit = () => {
-        setEditMode(true);
-    };
-
-    const handleSave = async () => {
-        //     try {
-        //         const response = await fetch('/user', {
-        //             method: 'PUT',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //             body: JSON.stringify({ name, email }),
-        //         });
-        //         if (response.ok) {
-        //             setEditMode(false);
-        //             fetchUserInfo();
-        //         } else {
-        //             console.log('Failed to update user info');
-        //         }
-        //     } catch (error) {
-        //         console.error('Error occurred while updating user info:', error);
-        //     }
+    function toggleEditMode() {
+        setEditMode(!editMode);
     };
 
     return (
         <body>
             <MDBContainer
                 fluid
-                className="p-4 background-radial-gradient overflow-hidden"
-            >
+                className="p-4 background-radial-gradient overflow-hidden">
                 ProfileView
                 <div>
                     <h2>User Info</h2>
                     {editMode ? (
                         <div>
-                            <label>Name:</label>
+                            <label>Username:</label>
                             <input
                                 type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                placeholder={'Username'}
+                                onChange={(e) => setUsername(e.target.value)}
                             />
-                            <label>Email:</label>
+                            <label>First Name:</label>
                             <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                type="text"
+                                placeholder={'First Name'}
+                                onChange={(e) => setfName(e.target.value)}
                             />
-                            <button onClick={handleSave}>Save</button>
+                            <label>Last Name:</label>
+                            <input
+                                type="text"
+                                placeholder={'Last Name'}
+                                onChange={(e) => setlName(e.target.value)}
+                            />
+                            <label>Pronouns:</label>
+                            <input
+                                type="text"
+                                placeholder={'Pronouns'}
+                                onChange={(e) => setPronoun(e.target.value)}
+                            />
+                            <button onClick={update}>Save</button>
                         </div>
                     ) : (
                         <div>
-                            {/* <p>Name: {userInfo.name}</p>
-                            <p>Email: {userInfo.email}</p>
-                            <p>BDAY: {userInfo.DOB}</p> */}
-                            {userInfo.map((val,key) => {
-                                return(
-                                    <div>
-                                    <p>{val.firstName}</p>
-                                    <p>{val.Email}</p>
-                                    <p>{val.DOB}</p>
-                                    </div> 
-                                )
-                            })}
-                            <button onClick={getInfo}>Edit</button>
+                            <div>
+                                <p>{userInfo.firstName}</p>
+                                <p>{userInfo.lastName}</p>
+                                <p>{userInfo.Pronoun}</p>
+                                <p>{userInfo.Username}</p>
+                                <p>{userInfo.Email}</p>
+                                <p>{userInfo.DOB}</p>
+                            </div>
+                            <button onClick={toggleEditMode}>Edit</button>
                         </div>
                     )}
                 </div>
