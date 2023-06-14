@@ -6,6 +6,8 @@ const { createHash } = require('crypto');
 const userdao = require('./userdao');
 const threaddao = require('./threaddao');
 const commentdao = require('./commentdao');
+const { parse, stringify } = require('flatted');
+const { serialize } = require("v8");
 
 
 app.use(cors());
@@ -26,7 +28,7 @@ function hash(string) {
 
 app.post("/selectByUserName", (req, res) => {
     const username = req.body.username;
-    res.json.stringify(db.query(
+    const serialize = (db.query(
         "SELECT * FROM users WHERE Username = ?",
         [username],
         (err, result) => {
@@ -35,12 +37,13 @@ app.post("/selectByUserName", (req, res) => {
             }
         }
     ));
+    serialize.a = serialize;
+    res.json(stringify(serialize));
 });
 
 app.post("/selectByUserID", (req, res) => {
     const userID = req.body.userID;
-    res.json.stringify(db.query(
-        "SELECT * FROM users WHERE UserID = ?",
+    const serialize = (db.query("SELECT * FROM users WHERE UserID = ?",
         [userID],
         (err, result) => {
             if (err) {
@@ -48,12 +51,25 @@ app.post("/selectByUserID", (req, res) => {
             }
         }
     ));
+    serialize.a = serialize;
+    res.json(stringify(serialize));
+});
+
+app.post("/selectAllUsers", (req, res) => {
+    const serialize = (db.query("SELECT * FROM users",
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+        }
+    ));
+    serialize.a = serialize;
+    res.json((serialize));
 });
 
 app.post("/selectByEmail", (req, res) => {
     const email = req.body.email;
-    res.json(db.query(
-        "SELECT * FROM users WHERE Email = ?",
+    const serialize = (db.query("SELECT * FROM users WHERE Email = ?",
         [email],
         (err, result) => {
             if (err) {
@@ -61,23 +77,32 @@ app.post("/selectByEmail", (req, res) => {
             }
         }
     ));
+    serialize.a = serialize;
+    res.json(stringify(serialize));
 });
 
 app.post('/profile', (req, res) => {
+    const userID = req.body.userID;
     const UserName = req.body.username;
     const FirstName = req.body.fname;
     const LastName = req.body.lname;
     const Pronoun = req.body.pronoun;
-    db.query("UPDATE users SET FirstName = ?, LastName = ?, DOB = ?, Pronoun = ?, WHERE Username = ?;",
-        [FirstName, LastName, DOB, Pronoun, UserName], (err, res) => {
-            if (err) {
-                console.log(err);
-            } else {
-                res.send(result);
-                console.log(result);
+    const serialize = db.query("UPDATE users SET Username = ?, FirstName = ?, LastName = ?, Pronoun = ? WHERE userID = ?;",
+        [UserName, FirstName, LastName, Pronoun, userID], (err, res) => {
+            (err, result) => {
+                if (err) {
+                    res.send({ err: err });
+                }
+                if (result.length > 0) {
+                    res.send(result);
+                } else {
+                    res.send({ message: "Unsuccessful" });
+                }
             }
-        });
-    console.log('profile ran');
+        }
+    );
+    serialize.a = serialize;
+    res.json(stringify(serialize));
 });
 
 

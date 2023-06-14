@@ -42,78 +42,101 @@ export default function Signup() {
   const navigate = useNavigate();
   const [cookies, setCookie] = useCookies(['username']);
 
-  const [Alert, setAlert] = useState("");
+  const [tooShort, setTooShort] = useState(false);
+  const [noLower, setNoLower] = useState(false);
+  const [noUpper, setNoUpper] = useState(false);
+  const [noNumber, setNoNumber] = useState(false);
+  const [noMatch, setNoMatch] = useState(false);
+  const [usernameTaken, setUsernameTaken] = useState(false);
+  const [emailTaken, setEmailTaken] = useState(false);
+  const [accountCreated, setAccountCreated] = useState(false);
+  const [termsAgreed, setTermsAgreed] = useState(false);
+  const [allSet, setAllSet] = useState(false);
 
   const handle = () => {
     setCookie('username', username, { path: '/' });
   };
 
-  const Signup = () => {
-    axios.post("http://localhost:3001/signup", {
-      fname: fname,
-      lname: lname,
-      username: username,
-      dob: dob,
-      email: email,
-      pronouns: pronouns,
-      password: password,
-    }).then((response) => {
-      setAlert('<Alert severity="success">Account successfully created</Alert>')
-      navigate('/login');
-      console.log(response.data);
-    });
+  function SignUp() {
+    if (allSet) {
+      axios.post("http://localhost:3001/signup", {
+        fname: fname,
+        lname: lname,
+        username: username,
+        dob: dob,
+        email: email,
+        pronouns: pronouns,
+        password: password,
+      }).then((response) => {
+        setAccountCreated(true);
+        navigate('/login');
+      });
+    }
   }
 
-  function alert(username, email, password, confirmpassword) {
+  const handleChangeTerms = () => {
+    setTermsAgreed(!termsAgreed);
+  };
+
+  function alert() {
     var strUsername = String(username);
     var strEmail = String(email);
     var strPassword = String(password);
     var strConfirmPassword = String(confirmpassword);
     if (strPassword.length < 8) {
-      console.log(strPassword.length);
-      setAlert('<Alert severity="error">Password must be at least 8 characters long!</Alert>')
-      return null;
+      setTooShort(true);
+    } else {
+      setTooShort(false);
     }
     if (strPassword.search(/[a-z]/) < 0) {
-      console.log(strPassword.search(/[a-z]/));
-      setAlert('<Alert severity="error">Password must contain at least one lowercase letter!</Alert>')
-      return null;
+      setNoLower(true);
+    } else {
+      setNoLower(false);
     }
     if (strPassword.search(/[A-Z]/) < 0) {
-      console.log(strPassword.search(/[A-Z]/));
-      setAlert('<Alert severity="error">Password must contain at least one uppercase letter!</Alert>')
-      return null;
+      setNoUpper(true);
+    } else {
+      setNoUpper(false);
     }
     if (strPassword.search(/[0-9]/) < 0) {
-      console.log(strPassword.search(/[0-9]/));
-      setAlert('<Alert severity="error">Password must contain at least one number!</Alert>')
-      return null;
+      setNoNumber(true);
+    } else {
+      setNoNumber(false);
     }
-    if (strPassword != strConfirmPassword) {
-      console.log(strPassword, strConfirmPassword);
-      setAlert('<Alert severity="error">Password and Confirm Password do not match!</Alert>')
-      return null;
+    if (strPassword !== strConfirmPassword) {
+      setNoMatch(true);
+    } else {
+      setNoMatch(false);
     }
     axios.post("http://localhost:3001/selectByUserName", {
-      username: username,
+      username: strUsername,
     }).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
-        setAlert('<Alert severity="error">Username already in use!</Alert>')
-        return null;
+        setUsernameTaken(true);
+      } else {
+        setUsernameTaken(false);
       }
     });
     axios.post("http://localhost:3001/selectByEmail", {
-      email: email,
+      email: strEmail,
     }).then((response) => {
-      console.log(response.data);
       if (response.data.length > 0) {
-        setAlert('<Alert severity="error">Email already in use!</Alert>')
-        return null;
+        setEmailTaken(true);
+      } else {
+        setEmailTaken(false);
       }
     });
-    Signup();
+    if (fname !== null && lname !== null && username !== null && dob !== null && pronouns !== null && email !== null && tooShort === false && noLower === false && noUpper === false && noNumber === false && noMatch === false && usernameTaken === false && emailTaken === false && termsAgreed === true) {
+      setAllSet(true);
+    } else {
+      setAllSet(false);
+    }
   }
+
+  useEffect(() => {
+    alert();
+  });
 
   return (
     <body>
@@ -161,12 +184,22 @@ export default function Signup() {
                 <MDBInput wrapperClass='mb-4' placeholder='Confirm Password' id='form7' type='password' required onChange={(e) => { setConfirmPassword(e.target.value); }} />
 
                 <div className='d-flex justify-content-center mb-4'>
-                  <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' required label='Agree to&nbsp;' /> <a href="#"> Terms and Conditions</a>
+                  <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' required onChange={handleChangeTerms} label='Agree to&nbsp;' /> <a href="#"> Terms and Conditions</a>
                 </div>
-                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={alert}>sign up</button>
                 <div className="text-center">
-                  <p className="mb-3 mt-4">{Alert}</p>
+                  <p className="mb-3 mt-4">
+                    {tooShort ? <p className="mb-3 mt-4"><Alert severity="warning">Password must be at least 8 characters long!</Alert></p> : null}
+                    {noLower ? <p className="mb-3 mt-4"><Alert severity="warning">Password must contain at least one lowercase letter!</Alert></p> : null}
+                    {noUpper ? <p className="mb-3 mt-4"><Alert severity="warning">Password must contain at least one uppercase letter!</Alert></p> : null}
+                    {noNumber ? <p className="mb-3 mt-4"><Alert severity="warning">Password must contain at least one number!</Alert></p> : null}
+                    {noMatch ? <p className="mb-3 mt-4"><Alert severity="warning">Passwords do not match!</Alert></p> : null}
+                    {usernameTaken ? <p classNam e="mb-3 mt-4"><Alert severity="warning">Username is already taken!</Alert></p> : null}
+                    {emailTaken ? <p className="mb-3 mt-4"><Alert severity="warning">Email is already taken!</Alert></p> : null}
+                    {termsAgreed ? null : <p className="mb-3 mt-4"><Alert severity="warning">You must agree to the terms and conditions!</Alert></p>}
+                    {accountCreated ? <p className="mb-3 mt-4"><Alert severity="success">Account created!</Alert></p> : null}
+                  </p>
                 </div>
+                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={SignUp()}>sign up</button>
                 <div className="text-center">
                   <p className="mb-3 mt-4">have an account?</p>
                   <MDBRow>

@@ -16,10 +16,6 @@
   background-repeat: no-repeat;
 }
 
-body {
-  overflow: hidden;
-}
-
 .pronouns {
   background-color: white;
   border-radius: 0.4rem;
@@ -118,4 +114,25 @@ body {
   padding-top: 0.5rem;
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+/* custom scroll bar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5em;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

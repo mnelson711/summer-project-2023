@@ -23,30 +23,15 @@ import "bootstrap-css-only/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
 
 export default function Login() {
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useState("");
   const [cookies, setCookie] = useCookies(['username']);
 
-  // event handler for changes to userid text field
-  const handleUseridInputChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handle = () => {
-    setCookie('username', username, { path: '/' });
-  };
-
-  // event handler for changes to password text field
-  const handlePasswordInputChange = (event) => {
-    setPassword(event.target.value);
-  };
-
   const login = () => {
     axios.post("http://localhost:3001/login", {
-      username: username,
+      username: username.toLowerCase(),
       password: password
 
     }).then((response) => {
@@ -81,7 +66,7 @@ export default function Login() {
             <div id="radius-shape-2" className="position-absolute shadow-5-strong"></div>
             <MDBCard className='my-5 bg-glass'>
               <MDBCardBody className='p-5'>
-                <MDBInput wrapperClass='mb-4' placeholder='Email' id='form3' type='email' onChange={(e) => { setUsername(e.target.value); }} />
+                <MDBInput wrapperClass='mb-4' placeholder='Username' id='form3' type='text' onChange={(e) => { setUsername(e.target.value); }} />
                 <MDBInput wrapperClass='mb-4' placeholder='Password' id='form4' type='password' onChange={(e) => { setPassword(e.target.value); }} />
                 <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={login}>sign in</button>
                 <p>{loginStatus}</p>

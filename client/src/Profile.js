@@ -27,7 +27,8 @@ import { useCookies } from "react-cookie";
 
 export default function Profile() {
     const [editMode, setEditMode] = useState(false);
-    const userID = useCookies("userID")[0];
+    const userID = 2;
+    const [userData, setUserData] = useState([]);
     const [username, setUsername] = useState("");
     const [fname, setfName] = useState("");
     const [lname, setlName] = useState("");
@@ -38,6 +39,7 @@ export default function Profile() {
         axios.post("http://localhost:3001/selectByUserID", {
             userID: userID
         }).then((response) => {
+            setUserData(response.data)
             console.log(response.data);
         });
     };
@@ -48,14 +50,16 @@ export default function Profile() {
             fname: fname,
             lname: lname,
             pronoun: pronoun,
+            userID: userID,
         }).then((response) => {
             console.log(response.data);
         });
     }
-
     function toggleEditMode() {
         setEditMode(!editMode);
     };
+
+    console.log(userData);
 
     return (
         <body>
@@ -96,7 +100,16 @@ export default function Profile() {
                     ) : (
                         <div>
                             <div>
-                                <p>{userInfo.firstName}</p>
+                                {userData.map(item => (
+                                    <li key={item.userID}>{item.FirstName}</li>
+                                ))}
+                                <p>{userData.FirstName}</p>
+                                <p>{userData.lastName}</p>
+                                <p>{userData.Pronoun}</p>
+                                <p>{userData.Username}</p>
+                                <p>{userData.Email}</p>
+                                <p>{userData.DOB}</p>
+                                <p>{userInfo.FirstName}</p>
                                 <p>{userInfo.lastName}</p>
                                 <p>{userInfo.Pronoun}</p>
                                 <p>{userInfo.Username}</p>
