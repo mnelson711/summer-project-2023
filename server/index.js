@@ -28,57 +28,68 @@ function hash(string) {
 
 app.post("/selectByUserName", (req, res) => {
     const username = req.body.username;
-    const serialize = (db.query(
-        "SELECT * FROM users WHERE Username = ?",
+    (db.query("SELECT * FROM users WHERE Username = ?",
         [username],
         (err, result) => {
             if (err) {
                 res.send({ err: err });
             }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send({ message: "None" });
+            }
         }
     ));
-    serialize.a = serialize;
-    res.json(stringify(serialize));
 });
 
 app.post("/selectByUserID", (req, res) => {
     const userID = req.body.userID;
-    const serialize = (db.query("SELECT * FROM users WHERE UserID = ?",
+    (db.query("SELECT * FROM users WHERE UserID = ?",
         [userID],
         (err, result) => {
             if (err) {
                 res.send({ err: err });
             }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send({ message: "None" });
+            }
         }
     ));
-    serialize.a = serialize;
-    res.json(stringify(serialize));
 });
 
 app.post("/selectAllUsers", (req, res) => {
-    const serialize = (db.query("SELECT * FROM users",
+    (db.query("SELECT * FROM users",
         (err, result) => {
             if (err) {
                 res.send({ err: err });
             }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send({ message: "None" });
+            }
         }
     ));
-    serialize.a = serialize;
-    res.json((serialize));
 });
 
 app.post("/selectByEmail", (req, res) => {
     const email = req.body.email;
-    const serialize = (db.query("SELECT * FROM users WHERE Email = ?",
+    (db.query("SELECT * FROM users WHERE Email = ?",
         [email],
         (err, result) => {
             if (err) {
                 res.send({ err: err });
             }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send({ message: "None" });
+            }
         }
     ));
-    serialize.a = serialize;
-    res.json(stringify(serialize));
 });
 
 app.post('/profile', (req, res) => {
@@ -87,24 +98,16 @@ app.post('/profile', (req, res) => {
     const FirstName = req.body.fname;
     const LastName = req.body.lname;
     const Pronoun = req.body.pronoun;
-    const serialize = db.query("UPDATE users SET Username = ?, FirstName = ?, LastName = ?, Pronoun = ? WHERE userID = ?;",
-        [UserName, FirstName, LastName, Pronoun, userID], (err, res) => {
-            (err, result) => {
-                if (err) {
-                    res.send({ err: err });
-                }
-                if (result.length > 0) {
-                    res.send(result);
-                } else {
-                    res.send({ message: "Unsuccessful" });
-                }
+    db.query("UPDATE users SET Username = ?, FirstName = ?, LastName = ?, Pronoun = ? WHERE userID = ?;",
+        [UserName, FirstName, LastName, Pronoun, userID],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
             }
+            res.send(result);
         }
     );
-    serialize.a = serialize;
-    res.json(stringify(serialize));
 });
-
 
 app.post("/signup", (req, res) => {
     const FirstName = req.body.fname;

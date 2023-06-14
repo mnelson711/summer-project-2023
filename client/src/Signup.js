@@ -24,7 +24,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Alert from '@mui/material/Alert';
-import { useCookies } from 'react-cookie';
 
 export default function Signup() {
   const [fname, setfname] = useState("");
@@ -40,7 +39,6 @@ export default function Signup() {
   const [confirmpassword, setConfirmPassword] = useState("");
 
   const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies(['username']);
 
   const [tooShort, setTooShort] = useState(false);
   const [noLower, setNoLower] = useState(false);
@@ -53,11 +51,7 @@ export default function Signup() {
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [allSet, setAllSet] = useState(false);
 
-  const handle = () => {
-    setCookie('username', username, { path: '/' });
-  };
-
-  function SignUp() {
+  const Insert = () => {
     if (allSet) {
       axios.post("http://localhost:3001/signup", {
         fname: fname,
@@ -68,10 +62,11 @@ export default function Signup() {
         pronouns: pronouns,
         password: password,
       }).then((response) => {
+        console.log(response.data.message);
         setAccountCreated(true);
         navigate('/login');
-      });
-    }
+      })
+    };
   }
 
   const handleChangeTerms = () => {
@@ -112,7 +107,6 @@ export default function Signup() {
       username: strUsername,
     }).then((response) => {
       if (response.data.length > 0) {
-        console.log(response.data);
         setUsernameTaken(true);
       } else {
         setUsernameTaken(false);
@@ -199,7 +193,7 @@ export default function Signup() {
                     {accountCreated ? <p className="mb-3 mt-4"><Alert severity="success">Account created!</Alert></p> : null}
                   </p>
                 </div>
-                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={SignUp()}>sign up</button>
+                <button className="ripple ripple-surface ripple-surface-light btn btn-primary btn-md w-100 mb-4" size='md' onClick={Insert}>sign up</button>
                 <div className="text-center">
                   <p className="mb-3 mt-4">have an account?</p>
                   <MDBRow>
