@@ -35,11 +35,15 @@ export default function Login() {
       password: password
 
     }).then((response) => {
+      // document.cookie = "username= Bob";
       if (response.data.message) {
         setLoginStatus(response.data.message)
       }
       else {
-        setLoginStatus(response.data[0].username);
+        setLoginStatus(response.data[0].Username);
+        console.log('Username is ' + response.data[0].Username);
+        document.cookie = "username= " + response.data[0].Username;
+        console.log(document.cookie);
         navigate('/home');
       }
       console.log(response.data);
