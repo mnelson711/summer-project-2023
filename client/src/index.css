@@ -82,7 +82,12 @@
 
 .bg-glass {
   background-color: hsla(0, 0%, 100%, 0.7) !important;
-  backdrop-filter: saturate(200%) blur(25px);
+  backdrop-filter: saturate(200%) blur(25px) !important;
+  transition: box-shadow .3s;
+}
+
+.bg-glass:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2); 
 }
 
 /* Sidebar */
@@ -123,7 +128,7 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #5a5a5a;
 }
 
 /* Handle */
@@ -135,4 +140,20 @@
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.top {
+  position: absolute !important;
+  top: 0% !important;
+  left: 0% !important;
+  width: 100% !important;
+}
+
+.margin {
+  margin-left: 1rem !important;
+  margin-right: 1rem !important;
+  @media (max-width: 768px) {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
 }
