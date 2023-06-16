@@ -214,6 +214,7 @@ export default function Signup() {
             </MDBCard>
           </MDBCol>
         </MDBRow>
+        <footer style={{ margin: '100rem' }}></footer>
       </MDBContainer>
     </body>
   );

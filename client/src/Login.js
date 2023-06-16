@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { useCookies } from 'react-cookie';
 import "./index.css";
+import "./index.css";
+import './index.css';
 import './bootstrap.min.css';
 import {
   MDBBtn,
@@ -24,15 +27,19 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [loginStatus, setLoginStatus] = useState("");
+  const [cookies, setCookie] = useCookies(['username']);
 
   const login = () => {
     axios.post("http://localhost:3001/login", {
       username: username.toLowerCase(),
       password: password
+
     }).then((response) => {
+      // document.cookie = "username= Bob";
       if (response.data.message) {
         setLoginStatus(response.data.message)
-      } else {
+      }
+      else {
         setLoginStatus(response.data[0].Username);
         console.log('UserID is ' + response.data[0].UserID);
         document.cookie = "UserID= " + response.data[0].UserID;
