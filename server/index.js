@@ -45,8 +45,9 @@ app.post("/selectByUserName", (req, res) => {
 
 app.post("/selectByUserID", (req, res) => {
     const userID = req.body.userID;
+    console.log(userID);
     (db.query("SELECT * FROM users WHERE UserID = ?",
-        [userID],
+        userID,
         (err, result) => {
             if (err) {
                 res.send({ err: err });
@@ -147,7 +148,7 @@ app.post("/login", (req, res) => {
             if (err) {
                 res.send({ err: err });
             }
-            if (result.length > 0) {
+            if (result) {
                 res.send(result);
             } else {
                 res.send({ message: "Incorrect username or password" });

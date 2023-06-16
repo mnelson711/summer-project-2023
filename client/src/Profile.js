@@ -25,16 +25,51 @@ export default function Profile() {
     const [fname, setfName] = useState("");
     const [lname, setlName] = useState("");
     const [pronoun, setPronoun] = useState("");
+    const [userIDCookie, setUserIDCookie] = useState('');
+    const [loading, setLoading] = useState(true);
     const Navigate = useNavigate();
 
-    const userInfo = () => {
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(";");
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == " ") {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    // const userInfo = () => {
+    //     axios
+    //     .post("http://localhost:3001/selectByUserID", {
+    //         userID: userIDCookie,
+    //     })
+    //     .then((response) => {
+    //         setUserData(response.data);
+    //         console.log("first name is: ", userData[0].FirstName);
+    //         setLoading(false);
+    //     });
+    // };
+    useEffect(()=> {
+        setUserIDCookie(getCookie("UserID"));
+        console.log('user cookie is: ', userIDCookie);
+
         axios.post("http://localhost:3001/selectByUserID", {
-            userID: userID
-        }).then((response) => {
-            setUserData(response.data)
-            console.log(response.data);
-        });
-    };
+            userID: userIDCookie,
+            })
+            .then((response) => {
+            setUserData(response.data);
+            console.log("first name is: ", userData[0].FirstName);
+            setLoading(false);
+            });
+    },[])
+
 
     function update() {
         axios.post("http://localhost:3001/profile", {
@@ -44,14 +79,20 @@ export default function Profile() {
             pronoun: pronoun,
             userID: userID,
         }).then((response) => {
-            console.log(response.data);
+            //console.log(response.data);
         });
     }
     function toggleEditMode() {
         setEditMode(!editMode);
     };
 
-    console.log(userData);
+    //console.log(userData);
+
+    if(loading) {
+        return(
+            <body>Loading</body>
+        );
+    }
 
     return (
         <body>
@@ -119,22 +160,18 @@ export default function Profile() {
                     ) : (
                         <div>
                             <div>
-                                {userData.map(item => (
+                                {/* {userData.map(item => (
                                     <li key={item.userID}>{item.FirstName}</li>
                                 ))}
-                                <p>{userData.FirstName}</p>
-                                <p>{userData.lastName}</p>
-                                <p>{userData.Pronoun}</p>
-                                <p>{userData.Username}</p>
-                                <p>{userData.Email}</p>
-                                <p>{userData.DOB}</p>
-                                <p>{userInfo.FirstName}</p>
-                                <p>{userInfo.lastName}</p>
-                                <p>{userInfo.Pronoun}</p>
-                                <p>{userInfo.Username}</p>
-                                <p>{userInfo.Email}</p>
-                                <p>{userInfo.DOB}</p>
+                                <p>{userData[0]}</p> */}
+                                <p>{userData[0].lastName}</p>
+                                <p>{userData[0].Pronoun}</p>
+                                <p>{userData[0].Username}</p>
+                                <p>{userData[0].Email}</p>
+                                <p>{userData[0].DOB}</p>
+
                             </div>
+                            {/* <button onClick={userInfo}>START</button> */}
                             <button onClick={toggleEditMode}>Edit</button>
                         </div>
                     )}

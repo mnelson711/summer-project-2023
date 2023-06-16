@@ -43,16 +43,16 @@ export default function Login() {
         setLoginStatus(response.data[0].Username);
         console.log('UserID is ' + response.data[0].UserID);
         document.cookie = "UserID= " + response.data[0].UserID;
-        console.log(document.cookie);
-        navigate('/home');
+        //console.log(document.cookie);
+        navigate('/profile');
       }
-      console.log(response.data);
+      //console.log(response.data);
     });
   };
 
   // react to change to userid or password state
   useEffect(() => {
-    console.log('username: ' + username, 'password: ', password)
+    //console.log('username: ' + username, 'password: ', password)
   }, [username, password]);
 
   return (
