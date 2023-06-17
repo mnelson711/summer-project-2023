@@ -96,7 +96,7 @@ export default function Profile() {
 
     return (
         <body>
-            <MDBContainer fluid className='p-4 background-radial-gradient overflow-hidden'>
+            <MDBContainer fluid className='p-4 background-radial-gradient overflow-hidden position-fixed'>
                 <MDBNavbar expand='lg' className="bg-glass top" >
                     <MDBContainer fluid>
                         <img src="Spectrum-Logo-NavBar1.svg" alt="" width="24" height="24" class="d-inline-block" />

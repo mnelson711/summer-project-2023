@@ -83,42 +83,11 @@
 .bg-glass {
   background-color: hsla(0, 0%, 100%, 0.7) !important;
   backdrop-filter: saturate(200%) blur(25px) !important;
-  transition: box-shadow .3s;
+  transition: box-shadow 1s;
 }
 
 .bg-glass:hover {
-  box-shadow: 0 0 11px rgba(33,33,33,.2); 
-}
-
-/* Sidebar */
-.sidebar {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  padding: 58px 0 0; /* Height of navbar */
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
-  width: 240px;
-  z-index: 600;
-}
-
-@media (max-width: 991.98px) {
-  .sidebar {
-    width: 100%;
-  }
-}
-.sidebar .active {
-  border-radius: 5px;
-  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
-}
-
-.sidebar-sticky {
-  position: relative;
-  top: 0;
-  height: calc(100vh - 48px);
-  padding-top: 0.5rem;
-  overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  box-shadow: 0 0 11px rgba(33, 33, 33, .5);
 }
 
 /* custom scroll bar */
@@ -128,18 +97,19 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #5a5a5a;
+  background-color: rgba(173, 165, 240, 0.5) !important;
+  backdrop-filter: saturate(200%) blur(25px) !important;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #909090;
   border-radius: 5em;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #575757;
 }
 
 .top {
@@ -147,6 +117,7 @@
   top: 0% !important;
   left: 0% !important;
   width: 100% !important;
+  z-index: 1000 !important;
 }
 
 .margin {
@@ -157,3 +128,170 @@
     margin-right: 0.5rem;
   }
 }
+
+.addThread {
+  border-radius: 50%;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 1rem;
+  width: 5vh;
+  height: 5vh;
+  z-index: 1000;
+  padding: 0;
+  border: none;
+  background: none;
+  transition: rotate .5s;
+}
+
+.addThread:focus {
+  rotate: -90deg;
+}
+
+.addThreadCard {
+  width: 50%;
+  position: absolute;
+  transform: translate(50%, 50%);
+  z-index: 100;
+}
+
+.addThreadButton {
+  border-radius: .5rem;
+  width: 10vh;
+  height: 5vh;
+  z-index: 1000;
+  padding: 0;
+  border: none;
+  rotate: 0;
+}
+
+.createThreadButton {
+  background-color: rgba(120, 120, 217, 0.5) !important;
+  backdrop-filter: saturate(200%) blur(25px) !important;
+  border-radius: .5rem;
+  width: fit-content;
+  padding: .5rem;
+  z-index: 1000;
+  border: none;
+  rotate: 0;
+  transition: all .5s cubic-bezier(0,.06,0,1);
+}
+
+.createThreadButton:hover {
+  background-color: rgba(120, 120, 217, 1) !important;
+  transform: scale(1.3);
+  animation: createThreadButtonShadow 2s infinite ease;
+}
+
+@keyframes createThreadButtonShadow {
+  0% {
+    box-shadow: 0px 3px 21px 1px rgba(171,205,255,1);
+  }
+  25% {
+    box-shadow: 3px 0px 21px 1px rgba(171,205,255,1);
+  }
+  50% {
+    box-shadow: 0px -3px 21px 1px rgba(171,205,255,1);
+  }
+  75% {
+    box-shadow: -3px 0px 21px 1px rgba(171,205,255,1);
+  }
+  100% {
+    box-shadow: 0px 3px 21px 1px rgba(171,205,255,1);
+  }
+}
+
+.cancelButton {
+  border-radius: .5rem;
+  width: fit-content;
+  padding: .5rem;
+  z-index: 1000;
+  border: none;
+  rotate: 0;
+}
+
+
+.tag {
+  user-select: none;
+	width: fit-content;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  background-color: hsl(218, 41%, 15%);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background-color 0.5s;  
+}
+
+.tag:hover {
+  background-color: hsl(218, 41%, 25%);
+}
+
+.addTagButton {
+  border-radius: .5rem;
+  z-index: 1000;
+  padding: .4rem;
+  border: none;
+  rotate: 0;
+  width: fit-content;
+}
+
+.flex1 {
+  flex: .2;
+}
+
+.flex2 {
+  flex: 2;
+}
+
+.tags {
+  
+  display: inline-flex;
+  justify-content: center;
+}
+
+.alert {
+  position: fixed;
+  transform: (50%, 50%);
+}
+
+.fade-out {
+  animation: fadeout 5s;
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fadein .5s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-out-tag {
+  animation: fadeouttag 1s;
+}
+
+@keyframes fadeouttag {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+} 

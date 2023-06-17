@@ -34,11 +34,7 @@ app.post("/selectByUserName", (req, res) => {
             if (err) {
                 res.send({ err: err });
             }
-            if (result.length > 0) {
-                res.send(result);
-            } else {
-                res.send({ message: "None" });
-            }
+            res.send(result);
         }
     ));
 });
@@ -49,14 +45,7 @@ app.post("/selectByUserID", (req, res) => {
     (db.query("SELECT * FROM users WHERE UserID = ?",
         userID,
         (err, result) => {
-            if (err) {
-                res.send({ err: err });
-            }
-            if (result.length > 0) {
-                res.send(result);
-            } else {
-                res.send({ message: "None" });
-            }
+            res.send(result);
         }
     ));
 });
@@ -92,6 +81,87 @@ app.post("/selectByEmail", (req, res) => {
         }
     ));
 });
+
+app.post("/selectAllThreads", (req, res) => {
+    (db.query("SELECT * FROM threads",
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send({ message: "None" });
+            }
+        }
+    ));
+});
+
+app.post("/selectByThreadID", (req, res) => {
+    const threadID = req.body.threadID;
+    (db.query("SELECT * FROM threads WHERE ThreadID = ?",
+        [threadID],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send({ message: "None" });
+            }
+        }
+    ));
+});
+
+app.post("/selectByThreadTitle", (req, res) => {
+    const title = req.body.title;
+    (db.query("SELECT * FROM threads WHERE Title = ?",
+        [title],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+            res.send(result);
+        }
+    ));
+});
+
+app.post("/addThread", (req, res) => {
+    const title = req.body.title;
+    const description = req.body.description;
+    const tags = req.body.tags;
+    const author = req.body.author;
+    const date = req.body.date;
+    db.query(
+        "INSERT INTO threads (Title, Description, Author, Tags, CreationDate) VALUES (?,?,?,?,?)",
+        [title, description, author, tags, date],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+            res.send(result);
+        }
+    );
+});
+
+app.post("/addComment", (req, res) => {
+    const threadID = req.body.threadID;
+    const comment = req.body.comment;
+    const author = req.body.author;
+    const date = req.body.date;
+    db.query(
+        "INSERT INTO comments (ThreadID, Comment, Author, Date) VALUES (?,?,?,?)",
+        [threadID, comment, author, date],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+            res.send(result);
+        }
+    );
+});
+
 
 app.post('/profile', (req, res) => {
     const userID = req.body.userID;
@@ -141,9 +211,11 @@ app.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
+    const hashed = hash(password);
+
     db.query(
         "SELECT * FROM users WHERE Username = ? AND Password = ?",
-        [username, password],
+        [username, hashed],
         (err, result) => {
             if (err) {
                 res.send({ err: err });
