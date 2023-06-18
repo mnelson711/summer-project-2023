@@ -23,29 +23,31 @@ export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = useState("");
+  const [loginStatus, setLoginStatus] = useState(false);
 
   const login = () => {
-    axios.post("http://localhost:3001/login", {
-      username: username.toLowerCase(),
-      password: password
-    }).then((response) => {
-      if (response.data.message) {
-        setLoginStatus(response.data.message)
-      } else {
-        setLoginStatus(response.data[0].Username);
-        console.log('UserID is ' + response.data[0].UserID);
-        document.cookie = "UserID= " + response.data[0].UserID;
-        //console.log(document.cookie);
-        navigate('/profile');
-      }
-      //console.log(response.data);
-    });
+    axios
+      .post("http://localhost:3001/login", {
+        username: username.toLowerCase(),
+        password: password,
+      })
+      .then((response) => {
+        if (response.data.message) {
+          setLoginStatus(response.data.message);
+        } else {
+          setLoginStatus(response.data[0].Username);
+          console.log("UserID is " + response.data[0].UserID);
+          document.cookie = "UserID= " + response.data[0].UserID;
+          console.log(document.cookie);
+          navigate("/home");
+        }
+        console.log(response.data);
+      });
   };
 
   // react to change to userid or password state
   useEffect(() => {
-    //console.log('username: ' + username, 'password: ', password)
+    console.log('username: ' + username, 'password: ', password)
   }, [username, password]);
 
   return (

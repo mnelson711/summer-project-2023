@@ -39,6 +39,12 @@ export default function Threads() {
         });
     }, []);
 
+    function goToThread(ThreadID) {
+        console.log("passed thread : " , ThreadID);
+        document.cookie = "ThreadID= " + ThreadID;
+        navigate("/individualThread");
+    };
+
     const handleshowAddThread = () => {
         if (!showAddThread) {
             setFade("fade-in bg-glass addThreadCard");
@@ -185,7 +191,7 @@ export default function Threads() {
                         <MDBContainer style={{ marginBottom: "3vh" }}>
                             <MDBCard className="bg-glass threadCard">
                                 <MDBCardBody>
-                                    <h2>{thread.Title}</h2>
+                                    <button className="threadTitleButton" onClick={() => goToThread(thread.ThreadID)}>{thread.Title}</button>
                                     <h5>{thread.Description}</h5>
                                     <h6>{thread.Tags.replaceAll(',', ' | ')}</h6>
                                     <h6>Created by <a href="/profile">{thread.Author}</a> on {thread.CreationDate.substring(0, 10)}</h6>

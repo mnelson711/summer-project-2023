@@ -46,29 +46,34 @@ export default function Profile() {
     }
 
     // const userInfo = () => {
-    //     axios
-    //     .post("http://localhost:3001/selectByUserID", {
+    //     setUserIDCookie(getCookie("UserID"));
+    //     console.log('user cookie is: ', userIDCookie);
+
+    //     axios.post("http://localhost:3001/selectByUserID", {
     //         userID: userIDCookie,
-    //     })
-    //     .then((response) => {
+    //         })
+    //         .then((response) => {
     //         setUserData(response.data);
     //         console.log("first name is: ", userData[0].FirstName);
     //         setLoading(false);
-    //     });
-    // };
+    //         });
+    //     };
+    // userInfo();
     useEffect(()=> {
         setUserIDCookie(getCookie("UserID"));
         console.log('user cookie is: ', userIDCookie);
-
         axios.post("http://localhost:3001/selectByUserID", {
             userID: userIDCookie,
             })
             .then((response) => {
             setUserData(response.data);
+            setfName(userData[0].fname);
+            setlName(userData[0].lname);
             console.log("first name is: ", userData[0].FirstName);
             setLoading(false);
             });
     },[])
+
 
 
     function update() {
@@ -88,11 +93,11 @@ export default function Profile() {
 
     //console.log(userData);
 
-    if(loading) {
-        return(
-            <body>Loading</body>
-        );
-    }
+    // if(loading) {
+    //     return(
+    //         <body>Loading</body>
+    //     );
+    // }
 
     return (
         <body>
@@ -164,11 +169,12 @@ export default function Profile() {
                                     <li key={item.userID}>{item.FirstName}</li>
                                 ))}
                                 <p>{userData[0]}</p> */}
-                                <p>{userData[0].lastName}</p>
-                                <p>{userData[0].Pronoun}</p>
+                                <p>{fname}</p>
+                                <p >{lname}</p>
+                                {/* <p>{userData[0].Pronoun}</p>
                                 <p>{userData[0].Username}</p>
                                 <p>{userData[0].Email}</p>
-                                <p>{userData[0].DOB}</p>
+                                <p>{userData[0].DOB}</p> */}
 
                             </div>
                             {/* <button onClick={userInfo}>START</button> */}
@@ -179,5 +185,6 @@ export default function Profile() {
                 <footer style={{ margin: "100rem" }}></footer>
             </MDBContainer>
         </body>
+
     );
 }

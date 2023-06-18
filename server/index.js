@@ -147,12 +147,12 @@ app.post("/addThread", (req, res) => {
 
 app.post("/addComment", (req, res) => {
     const threadID = req.body.threadID;
-    const comment = req.body.comment;
-    const author = req.body.author;
-    const date = req.body.date;
+    const content = req.body.content;
+    const creatorID = req.body.creatorID;
+    const timestamp = req.body.date;
     db.query(
-        "INSERT INTO comments (ThreadID, Comment, Author, Date) VALUES (?,?,?,?)",
-        [threadID, comment, author, date],
+        "INSERT INTO comments (content, creatorID, timestamp, ThreadID) VALUES (?,?,?,?)",
+        [content, creatorID, timestamp, threadID],
         (err, result) => {
             if (err) {
                 res.send({ err: err });
@@ -161,6 +161,24 @@ app.post("/addComment", (req, res) => {
         }
     );
 });
+
+app.post("/selectCommentsByThreadID", (req, res) => {
+    const threadID = req.body.ThreadID;
+    db.query(
+        "SELECT * FROM comment WHERE ThreadID = ?",
+        [threadID],
+        (err, result) => {
+        if (err) {
+            res.send({ err: err });
+        }
+        if (result.length > 0) {
+            res.send(result);
+        } else {
+            res.send({ message: "None" });
+        }
+        }
+    );
+    });
 
 
 app.post('/profile', (req, res) => {
