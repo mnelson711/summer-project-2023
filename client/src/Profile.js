@@ -25,7 +25,7 @@ export default function Profile() {
     const [fname, setfName] = useState("");
     const [lname, setlName] = useState("");
     const [pronoun, setPronoun] = useState("");
-    const [userIDCookie, setUserIDCookie] = useState('');
+    const userIDCookie = document.cookie.split("; ").find((row) => row.startsWith("UserID="))?.split("=")[1];
     const [loading, setLoading] = useState(true);
     const Navigate = useNavigate();
 
@@ -60,16 +60,16 @@ export default function Profile() {
     //     };
     // userInfo();
     useEffect(()=> {
-        setUserIDCookie(getCookie("UserID"));
         console.log('user cookie is: ', userIDCookie);
         axios.post("http://localhost:3001/selectByUserID", {
             userID: userIDCookie,
             })
             .then((response) => {
             setUserData(response.data);
-            setfName(userData[0].fname);
-            setlName(userData[0].lname);
-            console.log("first name is: ", userData[0].FirstName);
+            console.log(response.data);
+            // setfName(userData.FirstName);
+            // setlName(userData.LastName);
+            //console.log("first name is: ", userData[0].FirstName);
             setLoading(false);
             });
     },[])
@@ -93,11 +93,11 @@ export default function Profile() {
 
     //console.log(userData);
 
-    // if(loading) {
-    //     return(
-    //         <body>Loading</body>
-    //     );
-    // }
+    if(loading) {
+        return(
+            <body>Loading</body>
+        );
+    }
 
     return (
         <body>
@@ -169,12 +169,12 @@ export default function Profile() {
                                     <li key={item.userID}>{item.FirstName}</li>
                                 ))}
                                 <p>{userData[0]}</p> */}
-                                <p>{fname}</p>
+                                <p>{userData[0].FirstName}</p>
                                 <p >{lname}</p>
-                                {/* <p>{userData[0].Pronoun}</p>
+                                <p>{userData[0].Pronoun}</p>
                                 <p>{userData[0].Username}</p>
                                 <p>{userData[0].Email}</p>
-                                <p>{userData[0].DOB}</p> */}
+                                <p>{userData[0].DOB}</p>
 
                             </div>
                             {/* <button onClick={userInfo}>START</button> */}

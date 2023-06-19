@@ -45,23 +45,21 @@ export default function IndividualThread() {
     const [username, setUsername] = useState('');
     const [commentCreated, setCommentCreated] = useState(false);
     const [showAddComment, setShowAddComment] = useState(false);
+    const [commentsExist, setCommentsExist] = useState(false);
     const [content, setContent] = useState('');
     const [creatorID, setCreatorID] = useState('');
     const [fade, setFade] = useState(""); //fade in/out animation for alerts 
+    const [loading, setLoading] = useState(true);
     const delay = (ms) => new Promise((res) => setTimeout(res, ms));
     
     //console.log(ThreadID);
 
     useEffect(() => {
-        axios
-        .post("http://localhost:3001/selectCommentsByThreadID", {
-            ThreadID: ThreadID,
-        })
-        .then((response) => {
+        axios.post("http://localhost:3001/selectCommentsByThreadID", {
+            ThreadID: ThreadID,}).then((response) => {
             setComments(response.data);
-            console.log('comments: ', comments);
-        });
-        console.log(comments);
+            setLoading(!loading);
+            console.log("comments: ", response.data);});
     }, []);
 
     const Insert = async () => {
@@ -73,17 +71,19 @@ export default function IndividualThread() {
             })
             .then((response) => {
             setUsername(response.data[0].Username);
+            console.log(username);
             });
         if (!username) return;
 
         axios
             .post("http://localhost:3001/addComment", {
-            threadID: ThreadID,
+            ThreadID: ThreadID,
             content: content,
             creatorID: userID,
             date: new Date().toISOString().replace(/T/, " ").replace(/\..+/, ""),
             })
             .then((response) => {
+                console.log(response.data);
             setCommentCreated(true);
             delay(5000);
             handleshowAddComment();
@@ -101,6 +101,10 @@ export default function IndividualThread() {
         setContent("");
     };
 
+    // setCommentsExist(!comments.length === 0)
+    if(loading) {
+        return (<p>Loading</p>)
+    }
     return (
         <body>
         <MDBContainer fluid className="p-4 background-radial-gradient">
@@ -160,6 +164,7 @@ export default function IndividualThread() {
                     type="text-area"
                     onChange={(e) => {
                     setContent(e.target.value);
+                    console.log(content);
                     }}
                 />
 
@@ -182,6 +187,7 @@ export default function IndividualThread() {
             </MDBCard>
             ) : null}
 
+            {comments.length === 0 ? (
             <div style={{ marginTop: "10vh" }}>
             {comments.map((comment) => (
                 <MDBContainer style={{ marginBottom: "3vh" }}>
@@ -196,6 +202,13 @@ export default function IndividualThread() {
                 </MDBContainer>
             ))}
             </div>
+            ) : (
+            <div>
+                <br></br>
+                <p>No comments here yet!</p>
+                <p>Be the first to comment!</p>
+            </div> )}
+            
             {commentCreated ? (
             <p className="mb-3 mt-4">
                 <Alert className="fade-out alert" severity="success">

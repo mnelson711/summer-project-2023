@@ -146,12 +146,12 @@ app.post("/addThread", (req, res) => {
 });
 
 app.post("/addComment", (req, res) => {
-    const threadID = req.body.threadID;
+    const threadID = req.body.ThreadID;
     const content = req.body.content;
     const creatorID = req.body.creatorID;
     const timestamp = req.body.date;
     db.query(
-        "INSERT INTO comments (content, creatorID, timestamp, ThreadID) VALUES (?,?,?,?)",
+        "INSERT INTO comment (content, creatorID, timestamp, ThreadID) VALUES (?,?,?,?)",
         [content, creatorID, timestamp, threadID],
         (err, result) => {
             if (err) {
