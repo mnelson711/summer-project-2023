@@ -112,6 +112,18 @@ export default function IndividualThread() {
         setContent("");
     };
 
+    function getUsername(passedUserID) {
+        axios
+            .post("http://localhost:3001/selectByUserID", {
+                userID: passedUserID,
+            })
+            .then((response) => {
+                console.log(response.data);
+                return response.data[0].Username;
+            });
+        return '';
+    };
+
     // if (loading) {
     //     return (<p>Loading</p>)
     // }
@@ -204,7 +216,7 @@ export default function IndividualThread() {
                             <MDBContainer style={{ marginBottom: "3vh" }}>
                                 <MDBCard className="bg-glass threadCard">
                                     <MDBCardBody>
-                                        <h5>User: {comment.creatorID} On {comment.timestamp.substring(0, 10)}</h5>
+                                        <h5>User: {() => getUsername(comment.creatorID)} On {comment.timestamp.substring(0, 10)}</h5>
                                         <h6>
                                             {comment.content}
                                         </h6>

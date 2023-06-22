@@ -40,15 +40,23 @@ app.post("/selectByUserName", (req, res) => {
     ));
 });
 
+// app.post("/selectUsernameByUserID", (req, res) => {
+//     const userID = req.body.userID;
+//     console.log(userID);
+//     (db.query("SELECT Username FROM users WHERE UserID = ?",
+//         userID,
+//         (err, result) => {
+//             res.send(result);
+//         }
+//     ));
+// });
+
 app.post("/selectByUserID", (req, res) => {
     const userID = req.body.userID;
     console.log(userID);
-    (db.query("SELECT * FROM users WHERE UserID = ?",
-        userID,
-        (err, result) => {
-            res.send(result);
-        }
-    ));
+    db.query("SELECT * FROM users WHERE UserID = ?", userID, (err, result) => {
+        res.send(result);
+    });
 });
 
 app.post("/selectAllUsers", (req, res) => {
@@ -182,7 +190,7 @@ app.post("/selectCommentsByThreadID", (req, res) => {
 });
 
 
-app.post('/profile', (req, res) => {
+app.post('/profileUpdate', (req, res) => {
     const userID = req.body.userID;
     const UserName = req.body.username;
     const FirstName = req.body.fname;
@@ -247,13 +255,13 @@ app.post("/login", (req, res) => {
 
         }
     );
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log("Email sent: " + info.response);
-        }
-    });
+    // transporter.sendMail(mailOptions, function (error, info) {
+    //     if (error) {
+    //         console.log(error);
+    //     } else {
+    //         console.log("Email sent: " + info.response);
+    //     }
+    // });
 });
 
 var transporter = nodemailer.createTransport({

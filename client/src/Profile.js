@@ -46,40 +46,44 @@ export default function Profile() {
         return "";
     }
 
-    // const userInfo = () => {
-    //     setUserIDCookie(getCookie("UserID"));
-    //     console.log('user cookie is: ', userIDCookie);
-
-    //     axios.post("http://localhost:3001/selectByUserID", {
-    //         userID: userIDCookie,
-    //         })
-    //         .then((response) => {
-    //         setUserData(response.data);
-    //         console.log("first name is: ", userData[0].FirstName);
-    //         setLoading(false);
-    //         });
-    //     };
-    // userInfo();
     useEffect(()=> {
-        console.log('user cookie is: ', userIDCookie);
-        axios.post("http://localhost:3001/selectByUserID", {
-            userID: userIDCookie,
+        if (ownsAccount(userIDCookie, chosenUserCookie)) {
+            console.log("user cookie is: ", userIDCookie);
+            axios
+            .post("http://localhost:3001/selectByUserID", {
+                userID: userIDCookie,
             })
             .then((response) => {
-            setUserData(response.data);
-            console.log(response.data);
-            console.log('chosen user: ' + chosenUserCookie);
-            // setfName(userData.FirstName);
-            // setlName(userData.LastName);
-            //console.log("first name is: ", userData[0].FirstName);
-            setLoading(false);
+                setUserData(response.data);
+                console.log(response.data);
+                //console.log("chosen user is: " + chosenUserCookie);
+                //console.log("first name is: ", userData[0].FirstName);
+                setLoading(false);
             });
+        } else {
+            axios
+            .post("http://localhost:3001/selectByUserName", {
+                username: chosenUserCookie,
+            })
+            .then((response) => {
+                setUserData(response.data);
+                console.log(response.data);
+                //console.log("chosen user is: " + chosenUserCookie);
+                //console.log("first name is: ", userData[0].FirstName);
+                setLoading(false);
+                document.cookie = "chosenUser= " + userIDCookie;
+        });
+    }
     },[])
+
+    function ownsAccount(userIDCook, chosenUserCook) {
+        return userIDCook === chosenUserCook;
+    };
 
 
 
     function update() {
-        axios.post("http://localhost:3001/profile", {
+        axios.post("http://localhost:3001/profileUpdate", {
             username: username,
             fname: fname,
             lname: lname,
@@ -187,6 +191,7 @@ export default function Profile() {
                   onChange={(e) => setPronoun(e.target.value)}
                 />
                 <button onClick={update}>Save</button>
+                <button onClick={toggleEditMode}>Cancel</button>
               </div>
             ) : (
               <div>
