@@ -194,7 +194,8 @@ export default function Threads() {
                                     <button className="threadTitleButton" onClick={() => goToThread(thread.ThreadID)}>{thread.Title}</button>
                                     <h5>{thread.Description}</h5>
                                     <h6>{thread.Tags.replaceAll(',', ' | ')}</h6>
-                                    <h6>Created by <a href="/profile">{thread.Author}</a> on {thread.CreationDate.substring(0, 10)}</h6>
+                                    <h6>Created by <a href="/profile" onClick={
+                                        document.cookie = "chosenUser= " + thread.Author}>{thread.Author}</a> on {thread.CreationDate.substring(0, 10)}</h6>
                                     <FontAwesomeIcon icon={faHeart} size="xl" style={{ marginRight: ".5rem" }} />
                                     {thread.Likes === null ? 0 : thread.Likes}
                                 </MDBCardBody>
