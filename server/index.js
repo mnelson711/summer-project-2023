@@ -8,6 +8,7 @@ const threaddao = require('./threaddao');
 const commentdao = require('./commentdao');
 const { parse, stringify } = require('flatted');
 const { serialize } = require("v8");
+var nodemailer = require("nodemailer");
 
 
 app.use(cors());
@@ -168,17 +169,17 @@ app.post("/selectCommentsByThreadID", (req, res) => {
         "SELECT * FROM comment WHERE ThreadID = ?",
         [threadID],
         (err, result) => {
-        if (err) {
-            res.send({ err: err });
-        }
-        if (result.length > 0) {
-            res.send(result);
-        } else {
-            res.send({ message: "None" });
-        }
+            if (err) {
+                res.send({ err: err });
+            }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send({ message: "None" });
+            }
         }
     );
-    });
+});
 
 
 app.post('/profile', (req, res) => {
@@ -246,7 +247,30 @@ app.post("/login", (req, res) => {
 
         }
     );
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log("Email sent: " + info.response);
+        }
+    });
 });
+
+var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "mollyynelson@gmail.com",
+        pass: "mknlax123",
+    },
+});
+
+var mailOptions = {
+    from: "mollyynelson@gmail.com",
+    to: "mnelson3@students.stonehill.edu",
+    subject: "Sending Email using Node.js",
+    text: "That was easy! Example email",
+};
+
 
 app.listen(3001, () => {
     console.log("On port 3001");

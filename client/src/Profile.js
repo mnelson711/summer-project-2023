@@ -26,6 +26,7 @@ export default function Profile() {
     const [lname, setlName] = useState("");
     const [pronoun, setPronoun] = useState("");
     const userIDCookie = document.cookie.split("; ").find((row) => row.startsWith("UserID="))?.split("=")[1];
+    const chosenUserCookie = document.cookie.split("; ").find((row) => row.startsWith("chosenUser="))?.split("=")[1];
     const [loading, setLoading] = useState(true);
     const Navigate = useNavigate();
 
@@ -67,6 +68,7 @@ export default function Profile() {
             .then((response) => {
             setUserData(response.data);
             console.log(response.data);
+            console.log('chosen user: ' + chosenUserCookie);
             // setfName(userData.FirstName);
             // setlName(userData.LastName);
             //console.log("first name is: ", userData[0].FirstName);
@@ -100,91 +102,114 @@ export default function Profile() {
     }
 
     return (
-        <body>
-            <MDBContainer fluid className='p-4 background-radial-gradient overflow-hidden position-fixed'>
-                <MDBNavbar expand='lg' className="bg-glass top" >
-                    <MDBContainer fluid>
-                        <img src="Spectrum-Logo-NavBar1.svg" alt="" width="24" height="24" class="d-inline-block" />
-                        <MDBNavbarBrand className="text-white margin" href='/home'>Spectrum</MDBNavbarBrand>
-                        <MDBCollapse navbar >
-                            <MDBNavbarNav className='me-auto mb-2 mb-lg-0'>
-                            </MDBNavbarNav>
+      <body>
+        <MDBContainer
+          fluid
+          className="p-4 background-radial-gradient overflow-hidden position-fixed"
+        >
+          <MDBNavbar expand="lg" className="bg-glass top">
+            <MDBContainer fluid>
+              <img
+                src="Spectrum-Logo-NavBar1.svg"
+                alt=""
+                width="24"
+                height="24"
+                class="d-inline-block"
+              />
+              <MDBNavbarBrand className="text-white margin" href="/home">
+                Spectrum
+              </MDBNavbarBrand>
+              <MDBCollapse navbar>
+                <MDBNavbarNav className="me-auto mb-2 mb-lg-0"></MDBNavbarNav>
 
-                            <MDBNavbarNav className='d-flex w-auto'>
-                                <MDBNavbarItem className="margin">
-                                    <MDBNavbarLink aria-current='page' href='/threads'>
-                                        <MDBIcon fas icon='comments' size='2x' className='text-white' />
-                                    </MDBNavbarLink>
-                                </MDBNavbarItem>
-                                <MDBNavbarItem className="margin">
-                                    <MDBNavbarLink aria-current='page' href='/guidelines'>
-                                        <MDBIcon fas icon='book' size='2x' className='text-white' />
-                                    </MDBNavbarLink>
-                                </MDBNavbarItem>
-                                <MDBNavbarItem className="margin">
-                                    <MDBNavbarLink aria-current='page' href='/profile'>
-                                        <MDBIcon fas icon='user-circle' size='2x' className='text-black' />
-                                    </MDBNavbarLink>
-                                </MDBNavbarItem>
-                            </MDBNavbarNav>
-                        </MDBCollapse>
-                    </MDBContainer>
-                </MDBNavbar>
-                
-                ProfileView
+                <MDBNavbarNav className="d-flex w-auto">
+                  <MDBNavbarItem className="margin">
+                    <MDBNavbarLink aria-current="page" href="/threads">
+                      <MDBIcon
+                        fas
+                        icon="comments"
+                        size="2x"
+                        className="text-white"
+                      />
+                    </MDBNavbarLink>
+                  </MDBNavbarItem>
+                  <MDBNavbarItem className="margin">
+                    <MDBNavbarLink aria-current="page" href="/guidelines">
+                      <MDBIcon
+                        fas
+                        icon="book"
+                        size="2x"
+                        className="text-white"
+                      />
+                    </MDBNavbarLink>
+                  </MDBNavbarItem>
+                  <MDBNavbarItem className="margin">
+                    <MDBNavbarLink aria-current="page" href="/profile">
+                      <MDBIcon
+                        fas
+                        icon="user-circle"
+                        size="2x"
+                        className="text-black"
+                      />
+                    </MDBNavbarLink>
+                  </MDBNavbarItem>
+                </MDBNavbarNav>
+              </MDBCollapse>
+            </MDBContainer>
+          </MDBNavbar>
+          ProfileView
+          <div>
+            <h2>User Info</h2>
+            {editMode ? (
+              <div>
+                <label>Username:</label>
+                <input
+                  type="text"
+                  placeholder={"Username"}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <label>First Name:</label>
+                <input
+                  type="text"
+                  placeholder={"First Name"}
+                  onChange={(e) => setfName(e.target.value)}
+                />
+                <label>Last Name:</label>
+                <input
+                  type="text"
+                  placeholder={"Last Name"}
+                  onChange={(e) => setlName(e.target.value)}
+                />
+                <label>Pronouns:</label>
+                <input
+                  type="text"
+                  placeholder={"Pronouns"}
+                  onChange={(e) => setPronoun(e.target.value)}
+                />
+                <button onClick={update}>Save</button>
+              </div>
+            ) : (
+              <div>
                 <div>
-                    <h2>User Info</h2>
-                    {editMode ? (
-                        <div>
-                            <label>Username:</label>
-                            <input
-                                type="text"
-                                placeholder={'Username'}
-                                onChange={(e) => setUsername(e.target.value)}
-                            />
-                            <label>First Name:</label>
-                            <input
-                                type="text"
-                                placeholder={'First Name'}
-                                onChange={(e) => setfName(e.target.value)}
-                            />
-                            <label>Last Name:</label>
-                            <input
-                                type="text"
-                                placeholder={'Last Name'}
-                                onChange={(e) => setlName(e.target.value)}
-                            />
-                            <label>Pronouns:</label>
-                            <input
-                                type="text"
-                                placeholder={'Pronouns'}
-                                onChange={(e) => setPronoun(e.target.value)}
-                            />
-                            <button onClick={update}>Save</button>
-                        </div>
-                    ) : (
-                        <div>
-                            <div>
-                                {/* {userData.map(item => (
+                  {/* {userData.map(item => (
                                     <li key={item.userID}>{item.FirstName}</li>
                                 ))}
                                 <p>{userData[0]}</p> */}
-                                <p>{userData[0].FirstName}</p>
-                                <p >{lname}</p>
-                                <p>{userData[0].Pronoun}</p>
-                                <p>{userData[0].Username}</p>
-                                <p>{userData[0].Email}</p>
-                                <p>{userData[0].DOB}</p>
-
-                            </div>
-                            {/* <button onClick={userInfo}>START</button> */}
-                            <button onClick={toggleEditMode}>Edit</button>
-                        </div>
-                    )}
+                  <p>{userData[0].FirstName}</p>
+                  <p>{lname}</p>
+                  <p>{userData[0].Pronoun}</p>
+                  <p>{userData[0].Username}</p>
+                  <p>{userData[0].Email}</p>
+                  <p>{userData[0].DOB}</p>
                 </div>
-                <footer style={{ margin: "100rem" }}></footer>
-            </MDBContainer>
-        </body>
-
+                {/* <button onClick={userInfo}>START</button> */}
+                <button onClick={toggleEditMode}>Edit</button>
+                <p>message board for profile</p>
+              </div>
+            )}
+          </div>
+          <footer style={{ margin: "100rem" }}></footer>
+        </MDBContainer>
+      </body>
     );
 }
