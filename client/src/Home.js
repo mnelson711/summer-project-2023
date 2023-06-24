@@ -25,6 +25,14 @@ export default function Home() {
         }
         console.log(users);
     }, [fetchData, setFetchData]);
+
+    function sendEmail() {
+        axios
+            .post("http://localhost:3001/sendEmail")
+            .then((response) => {
+                setUsers(response.data);
+            });
+    }
     return (
         <body>
             <MDBContainer
@@ -82,7 +90,9 @@ export default function Home() {
                     </MDBContainer>
                 </MDBNavbar>
                 <SearchBar placeholder="Search for Users..." data={users} attribute={'Username'}/>
+                <button type="button" class="btn btn-primary" onClick={sendEmail}>Send an Email</button>
                 <footer style={{ margin: "100rem" }}></footer>
+
             </MDBContainer>
         </body>
     );

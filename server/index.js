@@ -2,34 +2,36 @@ const express = require("express");
 var app = express();
 const mysql = require("mysql");
 var cors = require("cors");
-const { createHash } = require('crypto');
-const userdao = require('./userdao');
-const threaddao = require('./threaddao');
-const commentdao = require('./commentdao');
-const { parse, stringify } = require('flatted');
+const { createHash } = require("crypto");
+const userdao = require("./userdao");
+const threaddao = require("./threaddao");
+const commentdao = require("./commentdao");
+const { parse, stringify } = require("flatted");
 const { serialize } = require("v8");
 var nodemailer = require("nodemailer");
-
+var Mailgen = require('mailgen')
+const { EMAIL, PASSWORD } = require("../env.js");
 
 app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-    user: 'doadmin',
-    password: 'AVNS_ScmoB1Kr9TtZ8e4UbcW',
-    host: 'db-mysql-nyc1-14138-spectrum-do-user-14136635-0.b.db.ondigitalocean.com',
-    port: '25060',
-    database: 'spectrum',
-    sslmode: 'REQUIRED',
+    user: "doadmin",
+    password: "AVNS_ScmoB1Kr9TtZ8e4UbcW",
+    host: "db-mysql-nyc1-14138-spectrum-do-user-14136635-0.b.db.ondigitalocean.com",
+    port: "25060",
+    database: "spectrum",
+    sslmode: "REQUIRED",
 });
 
 function hash(string) {
-    return createHash('sha256').update(string).digest('hex');
+    return createHash("sha256").update(string).digest("hex");
 }
 
 app.post("/selectByUserName", (req, res) => {
     const username = req.body.username;
-    (db.query("SELECT * FROM users WHERE Username = ?",
+    db.query(
+        "SELECT * FROM users WHERE Username = ?",
         [username],
         (err, result) => {
             if (err) {
@@ -37,7 +39,7 @@ app.post("/selectByUserName", (req, res) => {
             }
             res.send(result);
         }
-    ));
+    );
 });
 
 // app.post("/selectUsernameByUserID", (req, res) => {
@@ -60,55 +62,49 @@ app.post("/selectByUserID", (req, res) => {
 });
 
 app.post("/selectAllUsers", (req, res) => {
-    (db.query("SELECT * FROM users",
-        (err, result) => {
-            if (err) {
-                res.send({ err: err });
-            }
-            if (result.length > 0) {
-                res.send(result);
-            } else {
-                res.send({ message: "None" });
-            }
+    db.query("SELECT * FROM users", (err, result) => {
+        if (err) {
+            res.send({ err: err });
         }
-    ));
+        if (result.length > 0) {
+            res.send(result);
+        } else {
+            res.send({ message: "None" });
+        }
+    });
 });
 
 app.post("/selectByEmail", (req, res) => {
     const email = req.body.email;
-    (db.query("SELECT * FROM users WHERE Email = ?",
-        [email],
-        (err, result) => {
-            if (err) {
-                res.send({ err: err });
-            }
-            if (result.length > 0) {
-                res.send(result);
-            } else {
-                res.send({ message: "None" });
-            }
+    db.query("SELECT * FROM users WHERE Email = ?", [email], (err, result) => {
+        if (err) {
+            res.send({ err: err });
         }
-    ));
+        if (result.length > 0) {
+            res.send(result);
+        } else {
+            res.send({ message: "None" });
+        }
+    });
 });
 
 app.post("/selectAllThreads", (req, res) => {
-    (db.query("SELECT * FROM threads",
-        (err, result) => {
-            if (err) {
-                res.send({ err: err });
-            }
-            if (result.length > 0) {
-                res.send(result);
-            } else {
-                res.send({ message: "None" });
-            }
+    db.query("SELECT * FROM threads", (err, result) => {
+        if (err) {
+            res.send({ err: err });
         }
-    ));
+        if (result.length > 0) {
+            res.send(result);
+        } else {
+            res.send({ message: "None" });
+        }
+    });
 });
 
 app.post("/selectByThreadID", (req, res) => {
     const threadID = req.body.threadID;
-    (db.query("SELECT * FROM threads WHERE ThreadID = ?",
+    db.query(
+        "SELECT * FROM threads WHERE ThreadID = ?",
         [threadID],
         (err, result) => {
             if (err) {
@@ -120,20 +116,17 @@ app.post("/selectByThreadID", (req, res) => {
                 res.send({ message: "None" });
             }
         }
-    ));
+    );
 });
 
 app.post("/selectByThreadTitle", (req, res) => {
     const title = req.body.title;
-    (db.query("SELECT * FROM threads WHERE Title = ?",
-        [title],
-        (err, result) => {
-            if (err) {
-                res.send({ err: err });
-            }
-            res.send(result);
+    db.query("SELECT * FROM threads WHERE Title = ?", [title], (err, result) => {
+        if (err) {
+            res.send({ err: err });
         }
-    ));
+        res.send(result);
+    });
 });
 
 app.post("/addThread", (req, res) => {
@@ -189,14 +182,14 @@ app.post("/selectCommentsByThreadID", (req, res) => {
     );
 });
 
-
-app.post('/profileUpdate', (req, res) => {
+app.post("/profileUpdate", (req, res) => {
     const userID = req.body.userID;
     const UserName = req.body.username;
     const FirstName = req.body.fname;
     const LastName = req.body.lname;
     const Pronoun = req.body.pronoun;
-    db.query("UPDATE users SET Username = ?, FirstName = ?, LastName = ?, Pronoun = ? WHERE userID = ?;",
+    db.query(
+        "UPDATE users SET Username = ?, FirstName = ?, LastName = ?, Pronoun = ? WHERE userID = ?;",
         [UserName, FirstName, LastName, Pronoun, userID],
         (err, result) => {
             if (err) {
@@ -237,6 +230,7 @@ app.post("/signup", (req, res) => {
 app.post("/login", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
+    const userEmail = "mnelson3@students.stonehill.edu";
 
     const hashed = hash(password);
 
@@ -252,33 +246,65 @@ app.post("/login", (req, res) => {
             } else {
                 res.send({ message: "Incorrect username or password" });
             }
-
         }
     );
-    // transporter.sendMail(mailOptions, function (error, info) {
-    //     if (error) {
-    //         console.log(error);
-    //     } else {
-    //         console.log("Email sent: " + info.response);
-    //     }
-    // });
 });
 
-var transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: "mollyynelson@gmail.com",
-        pass: "mknlax123",
-    },
+app.post("/sendEmail", (res, req) => {
+    let config = {
+        service: "gmail",
+        auth: {
+            user: EMAIL,
+            pass: PASSWORD,
+        },
+    };
+    let userEmail = 'rbarry3@students.stonehill.edu';
+    let transporter = nodemailer.createTransport(config);
+
+    let MailGenerator = new Mailgen({
+        theme: "default",
+        product: {
+            name: "Spectrum Chat",
+            link: "https://mailgen.js/",
+        },
+    });
+
+    let response = {
+        body: {
+            name: "Spectrum Chat",
+            intro: "Verify your email address to join our community!",
+            table: {
+                data: [
+                    {
+                        link: "https://exampleverification.com",
+                        description: "A Backend application",
+                    },
+                ],
+            },
+            outro: "Looking forward to fucking your mother",
+        },
+    };
+
+    let mail = MailGenerator.generate(response);
+
+    let message = {
+        from: EMAIL,
+        to: userEmail,
+        subject: "Email Verification",
+        html: mail,
+    };
+
+    transporter
+        .sendMail(message)
+        .then(() => {
+            return res.status(201).json({
+                msg: "you should receive an email",
+            });
+        })
+        .catch((error) => {
+            return;
+        });
 });
-
-var mailOptions = {
-    from: "mollyynelson@gmail.com",
-    to: "mnelson3@students.stonehill.edu",
-    subject: "Sending Email using Node.js",
-    text: "That was easy! Example email",
-};
-
 
 app.listen(3001, () => {
     console.log("On port 3001");
