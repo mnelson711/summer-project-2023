@@ -30,6 +30,7 @@ import "mdbreact/dist/css/mdb.css";
 import Alert from "@mui/material/Alert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
+import SearchBar from "./Components/SearchBar";
 
 export default function Threads() {
     const delay = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -58,6 +59,7 @@ export default function Threads() {
                 setFetchData(false);
             });
         }
+        console.log(threads);
     }, [fetchData, setFetchData]);
 
     function goToThread(ThreadID) {
@@ -196,6 +198,7 @@ export default function Threads() {
               </MDBCollapse>
             </MDBContainer>
           </MDBNavbar>
+          <SearchBar placeholder="Search for Threads..." data={threads} attribute={'Title'}/>
 
           {showAddThread ? (
             <MDBCard id="addThreadMenu" className={fade}>
