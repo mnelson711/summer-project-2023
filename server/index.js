@@ -208,12 +208,13 @@ app.post("/signup", (req, res) => {
     const Email = req.body.email;
     const Pronoun = req.body.pronouns;
     const Password = req.body.password;
+    const picture = req.body.picture;
 
     const hashed = hash(Password);
 
     db.query(
-        "INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password) VALUES (?,?,?,?,?,?,?)",
-        [FirstName, LastName, Username, Email, Pronoun, DOB, hashed],
+        "INSERT INTO users (FirstName, LastName, Username, Email, Pronoun, DOB, Password, Picture) VALUES (?,?,?,?,?,?,?)",
+        [FirstName, LastName, Username, Email, Pronoun, DOB, hashed, picture],
         (err, result) => {
             if (err) {
                 res.send({ err: err });
@@ -258,7 +259,7 @@ app.post("/sendEmail", (res, req) => {
             pass: PASSWORD,
         },
     };
-    let userEmail = 'rbarry3@students.stonehill.edu';
+    let userEmail = 'gracenelsonn@gmail.com';
     let transporter = nodemailer.createTransport(config);
 
     let MailGenerator = new Mailgen({
@@ -281,7 +282,7 @@ app.post("/sendEmail", (res, req) => {
                     },
                 ],
             },
-            outro: "Looking forward to fucking your mother",
+            outro: "Looking forward to Seeing you",
         },
     };
 

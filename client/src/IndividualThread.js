@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
 import "./bootstrap.min.css";
@@ -33,10 +33,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 export default function IndividualThread() {
-    const ThreadID = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("ThreadID="))
-        ?.split("=")[1];
     const userID = document.cookie
         .split("; ")
         .find((row) => row.startsWith("UserID="))
@@ -52,6 +48,7 @@ export default function IndividualThread() {
     const [loading, setLoading] = useState(true);
     const [fetchData, setFetchData] = useState(true);
     const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+    const { id } = useParams();
 
     //console.log(ThreadID);
 
@@ -59,7 +56,7 @@ export default function IndividualThread() {
         if (fetchData) {
             axios
                 .post("http://localhost:3001/selectCommentsByThreadID", {
-                    ThreadID: ThreadID,
+                    ThreadID: id,
                 })
                 .then((response) => {
                     setComments(response.data);
@@ -87,7 +84,7 @@ export default function IndividualThread() {
 
         axios
             .post("http://localhost:3001/addComment", {
-                ThreadID: ThreadID,
+                ThreadID: id,
                 content: content,
                 creatorID: userID,
                 date: new Date().toISOString().replace(/T/, " ").replace(/\..+/, ""),

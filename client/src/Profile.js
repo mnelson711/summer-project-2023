@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "./index.css";
 import "./bootstrap.min.css";
@@ -29,6 +29,7 @@ export default function Profile() {
     const chosenUserCookie = document.cookie.split("; ").find((row) => row.startsWith("chosenUser="))?.split("=")[1];
     const [loading, setLoading] = useState(true);
     const Navigate = useNavigate();
+    const { id } = useParams();
 
     function getCookie(cname) {
         let name = cname + "=";
@@ -47,23 +48,10 @@ export default function Profile() {
     }
 
     useEffect(()=> {
-        if (ownsAccount(userIDCookie, chosenUserCookie)) {
-            console.log("user cookie is: ", userIDCookie);
-            axios
-            .post("http://localhost:3001/selectByUserID", {
-                userID: userIDCookie,
-            })
-            .then((response) => {
-                setUserData(response.data);
-                console.log(response.data);
-                //console.log("chosen user is: " + chosenUserCookie);
-                //console.log("first name is: ", userData[0].FirstName);
-                setLoading(false);
-            });
-        } else {
-            axios
+        console.log(id);
+        axios
             .post("http://localhost:3001/selectByUserName", {
-                username: chosenUserCookie,
+                username: id,
             })
             .then((response) => {
                 setUserData(response.data);
@@ -71,9 +59,8 @@ export default function Profile() {
                 //console.log("chosen user is: " + chosenUserCookie);
                 //console.log("first name is: ", userData[0].FirstName);
                 setLoading(false);
-                document.cookie = "chosenUser= " + userIDCookie;
+                //document.cookie = "chosenUser= " + userIDCookie;
         });
-    }
     },[])
 
     function ownsAccount(userIDCook, chosenUserCook) {

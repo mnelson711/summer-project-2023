@@ -13,6 +13,7 @@ export default function Home() {
 
     const [users, setUsers] = useState([]);
     const [fetchData, setFetchData] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (fetchData) {
@@ -33,6 +34,7 @@ export default function Home() {
                 setUsers(response.data);
             });
     }
+
     return (
         <body>
             <MDBContainer
@@ -91,6 +93,7 @@ export default function Home() {
                 </MDBNavbar>
                 <SearchBar placeholder="Search for Users..." data={users} attribute={'Username'}/>
                 <button type="button" class="btn btn-primary" onClick={sendEmail}>Send an Email</button>
+                <button type="button" class="btn btn-primary" onClick={navigate('/users')}>See all users</button>
                 <footer style={{ margin: "100rem" }}></footer>
 
             </MDBContainer>

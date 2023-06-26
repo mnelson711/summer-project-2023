@@ -24,6 +24,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Alert from '@mui/material/Alert';
+import { createAvatar } from "@dicebear/core";
+import { lorelei } from "@dicebear/collection";
 
 export default function Signup() {
   const [fname, setfname] = useState("");
@@ -53,6 +55,9 @@ export default function Signup() {
 
   const Insert = () => {
     if (allSet) {
+      const avatar = createAvatar(lorelei, {
+        // ... options
+      });
       axios.post("http://localhost:3001/signup", {
         fname: fname,
         lname: lname,
@@ -61,6 +66,7 @@ export default function Signup() {
         email: email,
         pronouns: pronouns,
         password: password,
+        picture: avatar.toString(),
       }).then((response) => {
         console.log(response.data.message);
         setAccountCreated(true);

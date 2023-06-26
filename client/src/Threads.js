@@ -65,11 +65,6 @@ export default function Threads() {
     console.log(threads);
   }, [fetchData, setFetchData]);
 
-  function goToThread(ThreadID) {
-    console.log("passed thread : ", ThreadID);
-    document.cookie = "ThreadID= " + ThreadID;
-    navigate("/individualThread");
-  }
 
   const handleshowAddThread = () => {
     if (!showAddThread) {
@@ -286,7 +281,7 @@ export default function Threads() {
                 <MDBCardBody>
                   <button
                     className="threadTitleButton"
-                    onClick={() => goToThread(thread.ThreadID)}
+                    onClick={() => navigate(`/individualThread/${thread.ThreadID}/`)}
                   >
                     {thread.Title}
                   </button>
@@ -295,10 +290,11 @@ export default function Threads() {
                   <h6>
                     Created by{" "}
                     <a
-                      href="profile"
+                      href=""
                       onClick={() => {
                         document.cookie = "chosenUser= " + thread.Author;
-                        //navigate('/profile');
+                        navigate(
+                          `/profile/${thread.Author}/`);
                       }}
                     >
                       {thread.Author}
