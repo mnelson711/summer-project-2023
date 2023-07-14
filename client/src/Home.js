@@ -7,6 +7,8 @@ import {
     MDBBtn, MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardBody, MDBInput, MDBCheckbox, MDBIcon, MDBNavbarToggler, MDBNavbarLink, MDBCollapse, MDBNavbar, MDBNavbarItem, MDBNavbarBrand, MDBDropdown, MDBDropdownMenu, MDBDropdownToggle, MDBDropdownItem, MDBNavbarNav
 } from 'mdb-react-ui-kit';
 import SearchBar from "./Components/SearchBar";
+import { createAvatar } from "@dicebear/core";
+import { lorelei } from "@dicebear/collection";
 
 
 export default function Home() {
@@ -22,6 +24,7 @@ export default function Home() {
                 .then((response) => {
                     setUsers(response.data);
                     setFetchData(false);
+                    createAvatar();
                 });
         }
         console.log(users);
@@ -34,6 +37,14 @@ export default function Home() {
                 setUsers(response.data);
             });
     }
+
+    // async function createAvatar() {
+    //     const avatar = createAvatar(lorelei, {
+    //       // ... options
+    //     });
+    //     const png = await avatar.png({});
+    //     png.toFile('/images/avatar.png');
+    // }
 
     return (
         <body>
@@ -93,7 +104,7 @@ export default function Home() {
                 </MDBNavbar>
                 <SearchBar placeholder="Search for Users..." data={users} attribute={'Username'}/>
                 <button type="button" class="btn btn-primary" onClick={sendEmail}>Send an Email</button>
-                <button type="button" class="btn btn-primary" onClick={navigate('/users')}>See all users</button>
+                <button type="button" class="btn btn-primary" onClick={() => {navigate('/users')}}>See all users</button>
                 <footer style={{ margin: "100rem" }}></footer>
 
             </MDBContainer>

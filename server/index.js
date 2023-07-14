@@ -251,6 +251,46 @@ app.post("/login", (req, res) => {
     );
 });
 
+app.post('/getFriends', (res, req) => {
+    const userID = req.body.userID;
+
+    db.query(
+        "SELECT userTwo FROM FRIENDS WHERE userOne = ?",
+        userID,
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+            if (result) {
+                res.send(result);
+            } else {
+                res.send({ message: "Incorrect username or password" });
+            }
+        }
+    );
+})
+
+app.post('/addFriend', (res, req) => {
+    const userOne = req.body.userOne;
+    const userTwo = req.body.userTwo;
+    const date = req.body.date;
+
+    db.query(
+        "INSERT INTO FRIENDS (UserOneID, userTwoID, datefriended) VALUES(?,?,?)",
+        [userOne, userTwo, date],
+        (err, result) => {
+            if (err) {
+                res.send({ err: err });
+            }
+            if (result.length > 0) {
+                res.send(result);
+            } else {
+                res.send({ message: "Unsuccessful" });
+            }
+        }
+    );
+});
+
 app.post("/sendEmail", (res, req) => {
     let config = {
         service: "gmail",
